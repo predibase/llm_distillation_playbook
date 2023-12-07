@@ -9,6 +9,27 @@ python jigsaw_data_prep/gpt_labeler.py \
     --outdir=data/dataset_subsets/ \
     --llm=gpt-3.5-turbo \
     --input_file=data/dataset_subsets/test.balanced.csv
+    
+python jigsaw_data_prep/gpt_labeler.py \
+    --outdir=data/dataset_subsets/ \
+    --llm=gpt-3.5-turbo \
+    --temperature=0.0 \
+    --input_file=data/dataset_subsets/test.balanced.csv
+    
+python jigsaw_data_prep/gpt_labeler.py \
+    --outdir=data/dataset_subsets/ \
+    --llm=gpt-4-1106-preview \
+    --input_file=data/dataset_subsets/sample.tiny.csv
+    
+python jigsaw_data_prep/gpt_labeler.py \
+    --outdir=data/dataset_subsets/ \
+    --llm=gpt-4-1106-preview \
+    --input_file=data/dataset_subsets/test.balanced.csv
+    
+python jigsaw_data_prep/gpt_labeler.py \
+    --outdir=data/dataset_subsets/ \
+    --llm=gpt-4-1106-preview \
+    --input_file=data/dataset_subsets/test.indist.1.csv
 """
 
 import argparse
@@ -83,7 +104,8 @@ def generate_synthetic_data(args):
                                 "role": "user",
                                 "content": full_prompt,
                             }
-                        ]
+                        ],
+                        "temperature": float(args.temperature),
                     },
                     metadata={
                         "row_id": row_id,
@@ -151,6 +173,9 @@ def generate_synthetic_data(args):
         f.write("\n")
         f.write(f"Total num_failed_queries: {num_failed_queries}")
 
+    with open(os.path.join(outdir_basename, "args.txt"), "w") as f:
+        f.write(str(args))
+
 
 def main(args):
     os.makedirs(args.outdir, exist_ok=True)
@@ -172,6 +197,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_file",
         help="Input file.",
+        required=True,
+    )
+    parser.add_argument(
+        "--temperature",
+        help="Temperature.",
+        default=0.8,
         required=True,
     )
 
