@@ -26,16 +26,21 @@ logger = logging.getLogger(__name__)
 openai.api_key = os.getenv("OPEN_AI_KEY")
 
 PROMPTS = {
-    "simple_prompt": """Given the input text below, please classify whether it is toxic. Provide your classification in a JSON format with the key 'is_bad'. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.Given the input text below, please classify whether it is toxic. Provide your classification in a JSON format with the key 'is_bad'. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
-            
+    "simple_prompt": """Given the input text below, please classify whether it is toxic. Provide your classification in a JSON format with the key 'is_bad'. If the comment is indeed toxic, set is_bad=1, otherwise set is_bad=0.
+
 Input text: '%s'
 
 Output:""",
-    "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
-            
-1. 'reasons_innocent': Provide a reason why the comment might be innocent.
-2. 'reasons_toxic': Provide a reason why the comment might be toxic.
-3. 'is_bad': Your final judgment on whether the comment is toxic.
+    #     "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
+    # 1. 'reasons_innocent': Provide a reason why the comment might be innocent.
+    # 2. 'reasons_toxic': Provide a reason why the comment might be toxic.
+    # 3. 'is_bad': Your final judgment on whether the comment is toxic. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0
+    # Input text: '%s'
+    # Output:""",
+    "cot_prompt": """For a well-intentioned content moderation app, we want to flag a comment if it may contain toxic, insulting, obscene, or threatening language. Given the input text, please classify its toxicity. Please format your response in the form of a python dictionary with the following keys:
+
+1. 'is_bad': If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
+2. 'reason': Provide an appropriate amount of detail for for your judgment.
 
 Input text: '%s'
 
@@ -72,6 +77,7 @@ def generate_synthetic_data(args):
         for row_id, values in data_file_dict.items():
             for prompt_id, prompt in PROMPTS.items():
                 full_prompt = prompt.format(values["comment_text"])
+
                 api.request(
                     data={
                         "messages": [
@@ -102,22 +108,24 @@ def generate_synthetic_data(args):
                 num_failed_queries += 1
             progress_bar()
 
-    # Determine the output file name.
+    # Determine the output directory.
     outfile_basename = f"{os.path.basename(args.input_file).replace('.csv', '')}.{args.llm}"
+    outdir_basename = f"{os.path.basename(args.input_file).replace('.csv', '')}.{args.llm}"
     counter = 0
-    while os.path.exists(os.path.join(args.outdir, outfile_basename)):
-        outfile_basename = f"{outfile_basename}_{counter}"
-        outfile_basename = outfile_basename.replace(f"_{counter}", f"_{counter + 1}")
-        counter += 1
+    if os.path.exists(os.path.join(args.outdir, outdir_basename)):
+        outdir_basename = f"{outdir_basename}_{counter}"
+        while os.path.exists(os.path.join(args.outdir, outdir_basename)):
+            outdir_basename = outdir_basename.replace(f"_{counter}", f"_{counter + 1}")
+            counter += 1
 
     # Write out the prompts.
-    os.makedirs(os.path.join(args.outdir, outfile_basename, "prompts"), exist_ok=True)
+    os.makedirs(os.path.join(args.outdir, outdir_basename, "prompts"), exist_ok=True)
     for prompt_id, prompt in PROMPTS.items():
-        with open(os.path.join(args.outdir, outfile_basename, f"prompts/{prompt_id}.txt"), "w") as f:
+        with open(os.path.join(args.outdir, outdir_basename, f"prompts/{prompt_id}.txt"), "w") as f:
             f.write(prompt)
 
     with open(
-        os.path.join(args.outdir, outfile_basename, f"{outfile_basename}_with_labels.csv"),
+        os.path.join(args.outdir, outdir_basename, f"{outfile_basename}.with_labels.csv"),
         "w",
     ) as f:
         csv_writer = csv.DictWriter(
