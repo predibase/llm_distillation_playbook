@@ -1,0 +1,246 @@
+id,comment_text,toxic,severe_toxic,obscene,threat,insult,identity_hate,is_bad,simple_prompt,cot_prompt
+de6c08e7779a4650,"17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC)Link titlelol",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+    'reason_innocent': 'The text appears to be a series of timestamps followed by what seems to be an accidental insertion of the words Link titlelol, which could be a mistake or a placeholder text without any harmful intent',
+    'reason_toxic': 'Without context, it is difficult to ascertain toxicity solely based on timestamps and the appended text Link titlelol, which does not contain any clear derogatory, aggressive, or harmful language',
+    'is_bad': 0
+}
+```"
+3c9a35abdd92f64a,"""
+
+October to November, 1868 (Custerwest)
+Gas and substitute by our (proper) Background section (based on the mil and gov websites version only).  
+
+The battle (Custerwest)
+Swap with our Battle section, based on the modern official account. Custerwest's contains the things which didn't happen, such as the discredited story of """"4 to 6 white captives"""" (discussed in detail before). I also noticed the version by Custerwest completely ommits civilian casalties (except the chief's wife).  
+
+The accounts of the battle (mostly pre-Custerwest)
+Swap with our Controversies.  
+
+Aftermath (ours)
+Addc.  
+
+Infobox
+Swap with ours - based only on the indiscussable things confirmed now, including what Custer said (which would be or not be true, but is not used in the today's estimates). Also, as always, only the government websites (AMH and Washita site). Also, I think it's more informative, and as the rest better written even (his is a mess).  """,0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The text appears to be a discussion on historical documentation and the accuracy of such documents, which may come from a place of seeking to present an accurate historical account',
+  'reason_toxic': 'The text may be seen as dismissive of another individuals work on the topic, labeling it as containing things which did not happen and calling it a mess, which can be perceived as disrespectful or harsh',
+  'is_bad': 0
+}
+```"
+946754f03a39ef83,"Sample question 
+
+does anyone know where the war sample at the start of Take It Back is from?",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The comment is a simple question about the origin of a sample used in a song, which is a typical inquiry for someone interested in music or music production',
+  'reason_toxic': 'There is no use of offensive language, aggressive tone, or harmful intent presented in the text that would indicate the comment is toxic',
+  'is_bad': 0
+}
+```"
+5d6ce6f49dd19b2a,"I have downloaded the New Chronology (2005).xls from the Yahoo group and I have entered its data into my Local NC manager. Now I have to structure it so I can produce a new overview. I will also have to update my database, which will take quite some effort...",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The text is focused on describing the user's experience and process with downloaded materials and organizing data, which does not inherently contain any abusive, aggressive, or harmful language',
+  'reason_toxic': 'There is no indication of harm, abuse, or aggression in the text provided, and no toxic content is apparent',
+  'is_bad': 0
+}
+```"
+3e3d2e29642b7009,"THE GODS 
+
+It's because I have sold my soul to the dark Lord, to whom I must always answer.
+
+But thanks for the flowers )",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+    'reason_innocent': 'The text could be interpreted as a lighthearted or humorous expression, potentially referencing a fantasy narrative or simply using hyperbole for comedic effect',
+    'reason_toxic': 'The mention of selling ones soul to the dark Lord could be understood as promoting dark or evil themes, or could be unsettling or offensive to some individuals',
+    'is_bad': 0
+}
+```"
+d5cceeaee7b71505,In my view they are all relevant to the section or subsection where they appear.,0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The comment appears to be a matter-of-fact statement regarding the relevance of certain topics or information to specific sections or subsections, likely in a document or discussion',
+  'reason_toxic': 'The comment does not contain any explicit language, insults, or aggressive tones that would indicate toxicity',
+  'is_bad': 0
+}
+```"
+a970c7015e24ad65,"I had left him five messages on his talk page, without response.  On the article page, he had made a ridiculous statement  claiming that his was correct to delete Islamist because it was in the body of the article  but I pointed ou that the lede is a summary.",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+    'reason_innocent': 'The comment could be part of a content dispute on a discussion forum or content collaboration platform like Wikipedia where users are debating the accuracy and relevance of information in an article. The language appears to be focused on the disagreement over content rather than a personal attack.',
+    'reason_toxic': 'The word ridiculous could be interpreted as dismissive or belittling towards another persons opinion or actions which may be seen as a form of disrespect or toxicity in a civil discussion.',
+    'is_bad': 0
+}
+```"
+64ae905a23ac64bb,"I don't believe Prof Williams changed that view, although it's been quoted in a number of sources (often critically).",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The text is part of a civil discourse and appears to be stating a fact or opinion without any direct insults or offensive language',
+  'reason_toxic': 'The text could be seen as subtly discrediting Prof Williams by questioning the validity of their view or the sources quoting them',
+  'is_bad': 0
+}
+```"
+53e8d9cb6659aab7,"I support the merge. Note that there is also an Albanian variant in article Byrek, which should also be merged in. I must say I share Dijxtra's thoughts...",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+    'reason_innocent': 'The comment appears to be a constructive suggestion about merging content in a collaborative editing environment, potentially a wiki or a database. There is also a reference to sharing someone elses thoughts which could signify agreement on a topic without malicious intent.',
+    'reason_toxic': 'Without further context, it is difficult to identify any toxic elements purely based on the text provided. The comment does not contain openly aggressive or disrespectful language and appears to be on-topic discussion.',
+    'is_bad': 0
+}
+```"
+b0999a8d9c86cee3,"Ok, you are unblocked. 
+
+Please read WP:C. In general, we can't use anything that has been previously published unless it is very old. If you have any copyright questions ask me, or leave a note at Wikipedia_talk:Copyright_problems. Duk",0,0,0,0,0,0,False,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The comment provides information on copyright guidelines and offers assistance for any questions regarding the topic. It appears to be a helpful and informative message without any apparent hostility or insults.',
+  'reason_toxic': 'There is no evident reason within the given context that the comment should be considered toxic. It lacks offensive language, aggressive tone, or harmful intent.',
+  'is_bad': 0
+}
+```"
+62e38775721eb79e,"| decline=Niggers, jews, bad news! Also my cock is hard so it's time for rape lol 86.181.0.14",1,1,1,0,1,1,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+  'reason_innocent': There is no context provided that could indicate an innocent usage as the text contains clear hate speech and references to sexual violence,
+  'reason_toxic': The comment includes racial slurs, hate speech against specific ethnic groups, and joking about sexual assault, all of which are toxic behaviors,
+  'is_bad': 1
+}
+```"
+f1b6c3c2a4290778,"No, you were trying to sound cool but ended up sounding like a retard.",1,0,0,0,1,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+    'reason_innocent': 'The speaker might be giving feedback based on their perception of the situation without intention to offend',
+    'reason_toxic': 'Use of the word retard is considered derogatory and offensive to people with intellectual disabilities; it is an ableist slur that contributes to stigmatization',
+    'is_bad': 1
+}
+```"
+73d26c37c6790cbf,EVula likes having gay sex with men!,1,0,0,0,0,1,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+    'reason_innocent': 'The statement may simply be a factual description of EVulas sexual orientation and practices without any intent to harm or demean',
+    'reason_toxic': 'The comment could be seen as an invasion of privacy or an attempt to shame or insult someone for their sexual orientation and practices, which is disrespectful and inappropriate',
+    'is_bad': 1
+}
+```"
+8b554bca6f3ac9d8,"Its madness. Shes of Chinese heritage, but JAPANESE! Thats impossible, its like... if some one was of Irish heritage... and was born in America... would that make them... AMERICAN... That would imply that a persons nationality, is biased on where there born, and has little to do with those who came before them... madness",1,0,0,0,0,0,True,"```json
+{
+  ""is_bad"": 0
+}
+```","```python
+{
+  'reason_innocent': 'The comment seems to be discussing the concept of nationality versus heritage which might be intended purely as a facetious or rhetorical exploration of identity without intent to harm',
+  'reason_toxic': 'The use of the word madness and the overall tone could be interpreted as mocking or expressing incredulity at the idea of people with one heritage being associated with a different nationality, which could be seen as dismissive or offensive particularly in the context of discussing ethnicity',
+  'is_bad': 0
+}
+```"
+34580fa8951c6fe0,also that waves are born from space because of the two big monster that they fucked on.Bold text,1,0,1,0,0,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+    'reason_innocent': 'The comment could be a creative or fantastical expression referring to a fictional narrative about the origins of waves, possibly discussing a mythical or science fiction scenario without intending harm.',
+    'reason_toxic': 'The comment contains a crude verb that could be considered offensive or inappropriate in many contexts, and the phrase may be interpreted as aggressive or non-consensual, reflecting a toxic attitude.',
+    'is_bad': 1
+}
+```"
+87e9cabee7c43e07,< who the heck wrote that crap _ explain why a forum devoted to Schapelle Corby should not be on her Wiki. What sets the other sites apart from mine ? My forum was the first and only Schapelle support site for months. Who the heck are you to say it should got here. You can remove it everyday and I will be back the next day to add it again. FFS get a life.,1,0,1,0,0,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+  'reason_innocent': 'The comment could be an expression of frustration or a passionate defense of the individual's perspective on the subject matter',
+  'reason_toxic': 'Use of derogatory language and an aggressive tone in demanding explanations and challenging the actions of others could be perceived as toxic',
+  'is_bad': 1
+}
+```"
+4001f43d06e5b8ad,"all allied pigdogs deserve death in Auschwitz 
+
+fuck entente",1,0,1,1,1,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+    'reason_innocent': None,
+    'reason_toxic': The comment contains hate speech directed towards a group, incites violence, uses a historical context of genocide (Auschwitz), and includes profanity, 
+    'is_bad': 1
+}
+```"
+75081c2821261827,you seam like a fucking hot and kinky person and i would like to bang the shit out of you,1,0,1,0,1,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+output = {
+    'reason_innocent': 'The message could be a poorly phrased compliment indicating attraction, potentially within a consensual and adult context where such language might be acceptable or desired.',
+    'reason_toxic': 'The message includes explicit and aggressive sexual language, objectifies the person, and uses profanity which could be considered harassment or unwanted sexual advances.',
+    'is_bad': 1
+}
+```"
+44ddd41a39cf01c5,How about you fuck off and don't stalk my edits?  201.215.187.159,1,0,1,0,0,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+    'reason_innocent': 'The comment could be seen as a strong reaction to perceived harassment or an invasion of privacy',
+    'reason_toxic': 'The comment uses explicit language and an aggressive tone which could be considered harassing or offensive to others',
+    'is_bad': 1
+}
+```"
+ae8057c0a6e0710c,shemeless and my ass RA0808 talkcontribs,1,0,1,0,0,0,True,"```json
+{
+  ""is_bad"": 1
+}
+```","```python
+{
+  'reason_innocent': ""The phrase could be taken out of context or part of a username which does not intend harm"",
+  'reason_toxic': ""The comment includes vulgar language and could be an attempt to insult or degrade someone"",
+  'is_bad': 1
+}
+```"
