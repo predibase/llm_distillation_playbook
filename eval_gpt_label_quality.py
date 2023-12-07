@@ -8,6 +8,7 @@ import argparse
 import ast
 from sklearn.metrics import roc_curve, auc
 import pandas as pd
+from tabulate import tabulate
 
 
 def calculate_accuracy_and_roc(df, prompt_output_column: str):
@@ -25,7 +26,7 @@ def calculate_accuracy_and_roc(df, prompt_output_column: str):
 
     # Handle rows with invalid strings (if any)
     # For example, here we drop rows with None in 'predicted_is_bad'
-    # df = df.dropna(subset=[f'{prompt_output_column}.parsed.is_bad'])
+    # df = df.dropna(subset=[parsed_is_bad_column_name])
 
     # Convert boolean 'is_bad' column to integer for comparison
     df["is_bad"] = df["is_bad"].astype(bool)
@@ -44,20 +45,17 @@ def calculate_accuracy_and_roc(df, prompt_output_column: str):
 def main(args):
     data = pd.read_csv(args.input_file)
 
-    accuracy, fpr, tpr, roc_auc = calculate_accuracy_and_roc(data, "simple_prompt")
-    print(f"Metrics for: '{args.input_file}':")
-    print("simple_prompt:")
-    print(f"accuracy: {accuracy}")
-    print(f"fpr: {fpr}")
-    print(f"tpr: {tpr}")
-    print(f"roc_auc: {roc_auc}")
+    prompt_ids = ["simple_prompt", "cot_prompt"]
 
-    calculate_accuracy_and_roc(data, "cot_prompt")
-    print("cot_prompt:")
-    print(f"accuracy: {accuracy}")
-    print(f"fpr: {fpr}")
-    print(f"tpr: {tpr}")
-    print(f"roc_auc: {roc_auc}")
+    table_data = []
+    headers = ["prompt_id", "accuracy", "fpr", "tpr", "roc_auc"]
+
+    print(f"Metrics for: '{args.input_file}':")
+    for prompt_id in prompt_ids:
+        accuracy, fpr, tpr, roc_auc = calculate_accuracy_and_roc(data, prompt_id)
+        table_data.append([prompt_id, accuracy, fpr, tpr, roc_auc])
+
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
 
 
 if __name__ == "__main__":

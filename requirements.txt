@@ -4,3 +4,4 @@ pandas
 openai_multi_client
 python-dotenv
 scikit-learn
+tabulate
