@@ -1,6 +1,6 @@
 """Sample usage:
 
-python eval_gpt_label_quality.py \
+python jigsaw_data_prep/eval_gpt_label_quality.py \
     --input_file=data/dataset_subsets/sample.tiny.with_synthetic_labels.csv
 """
 
@@ -9,6 +9,20 @@ import ast
 from sklearn.metrics import roc_curve, auc
 import pandas as pd
 from tabulate import tabulate
+import re
+
+
+def find_is_bad_value(s):
+    # Use a regular expression to find 'is_bad' (in single or double quotes) and its numeric value
+    match = re.search(r"('is_bad'|\"is_bad\"):\s*(\d+)", s)
+
+    # Check if the pattern was found
+    if match:
+        # Return the numeric value as an integer
+        return int(match.group(2))
+    else:
+        # Return None or raise an error if 'is_bad' is not found
+        return None
 
 
 def calculate_accuracy_and_roc(df, prompt_output_column: str):
@@ -17,8 +31,13 @@ def calculate_accuracy_and_roc(df, prompt_output_column: str):
         try:
             return ast.literal_eval(s)["is_bad"]
         except (ValueError, SyntaxError):
-            print(f"Encountered ValueError when parsing: {s}")
-            return None  # or False, depending on how you want to handle invalid strings
+            # print(f"Encountered ValueError when parsing: {s}")
+            try:
+                is_bad = find_is_bad_value(s)
+                return is_bad
+            except:
+                print(f"Encountered error when parsing: {s}, and could not manually extract value.")
+                return None  # or False, depending on how you want to handle invalid strings
 
     # Parse strings safely and extract 'is_bad'
     parsed_is_bad_column_name = f"{prompt_output_column}.parsed.is_bad"

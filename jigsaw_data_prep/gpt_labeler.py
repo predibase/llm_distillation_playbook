@@ -19,6 +19,9 @@ from alive_progress import alive_bar
 import dotenv
 import openai
 from openai_multi_client import OpenAIMultiClient
+from tabulate import tabulate
+from eval_gpt_label_quality import calculate_accuracy_and_roc
+import pandas as pd
 
 # Environment variables.
 dotenv.load_dotenv()
@@ -31,20 +34,19 @@ PROMPTS = {
 Input text: '%s'
 
 Output:""",
-    #     "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
-    # 1. 'reasons_innocent': Provide a reason why the comment might be innocent.
-    # 2. 'reasons_toxic': Provide a reason why the comment might be toxic.
-    # 3. 'is_bad': Your final judgment on whether the comment is toxic. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0
-    # Input text: '%s'
-    # Output:""",
-    "cot_prompt": """For a well-intentioned content moderation app, we want to flag a comment if it may contain toxic, insulting, obscene, or threatening language. Given the input text, please classify its toxicity. Please format your response in the form of a python dictionary with the following keys:
+    "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
 
-1. 'is_bad': If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
-2. 'reason': Provide an appropriate amount of detail for for your judgment.
+1. 'reason_innocent': Provide a reason why the comment might be innocent. For parsing consistency, do not use any single or double quotes in your response string, even if the your text may be grammatically invalid.
+2. 'reason_toxic': Provide a reason why the comment might be toxic. For parsing consistency, do not use single or double quotes in your response string, even if the your text may be grammatically invalid.
+3. 'is_bad': Your final judgment on whether the comment is toxic or not. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
 
 Input text: '%s'
-
 Output:""",
+    #     "cot_prompt": """For a well-intentioned content moderation app, we want to flag a comment if it may contain toxic, insulting, obscene, or threatening language. Given the input text, please classify its toxicity. Please format your response in the form of a python dictionary with the following keys:
+    # 1. 'is_bad': If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
+    # 2. 'reason': Provide an appropriate amount of detail for for your judgment.
+    # Input text: '%s'
+    # Output:""",
 }
 
 
@@ -76,7 +78,7 @@ def generate_synthetic_data(args):
     def make_requests():
         for row_id, values in data_file_dict.items():
             for prompt_id, prompt in PROMPTS.items():
-                full_prompt = prompt.format(values["comment_text"])
+                full_prompt = prompt % values["comment_text"]
 
                 api.request(
                     data={
@@ -110,22 +112,22 @@ def generate_synthetic_data(args):
 
     # Determine the output directory.
     outfile_basename = f"{os.path.basename(args.input_file).replace('.csv', '')}.{args.llm}"
-    outdir_basename = f"{os.path.basename(args.input_file).replace('.csv', '')}.{args.llm}"
+    outdir_basename = os.path.join(args.outdir, f"{os.path.basename(args.input_file).replace('.csv', '')}.{args.llm}")
     counter = 0
-    if os.path.exists(os.path.join(args.outdir, outdir_basename)):
+    if os.path.exists(outdir_basename):
         outdir_basename = f"{outdir_basename}_{counter}"
-        while os.path.exists(os.path.join(args.outdir, outdir_basename)):
+        while os.path.exists(outdir_basename):
             outdir_basename = outdir_basename.replace(f"_{counter}", f"_{counter + 1}")
             counter += 1
 
     # Write out the prompts.
-    os.makedirs(os.path.join(args.outdir, outdir_basename, "prompts"), exist_ok=True)
+    os.makedirs(os.path.join(outdir_basename, "prompts"), exist_ok=True)
     for prompt_id, prompt in PROMPTS.items():
-        with open(os.path.join(args.outdir, outdir_basename, f"prompts/{prompt_id}.txt"), "w") as f:
+        with open(os.path.join(outdir_basename, f"prompts/{prompt_id}.txt"), "w") as f:
             f.write(prompt)
 
     with open(
-        os.path.join(args.outdir, outdir_basename, f"{outfile_basename}.with_labels.csv"),
+        os.path.join(outdir_basename, f"{outfile_basename}.with_labels.csv"),
         "w",
     ) as f:
         csv_writer = csv.DictWriter(
@@ -137,7 +139,21 @@ def generate_synthetic_data(args):
         for row_id, values in data_file_dict.items():
             csv_writer.writerow(values)
 
+    # Calculate metrics and write them to a separate file.
+    data = pd.read_csv(os.path.join(outdir_basename, f"{outfile_basename}.with_labels.csv"))
+    prompt_ids = PROMPTS.keys()
+    table_data = []
+    headers = ["prompt_id", "accuracy", "fpr", "tpr", "roc_auc"]
+    for prompt_id in prompt_ids:
+        accuracy, fpr, tpr, roc_auc = calculate_accuracy_and_roc(data, prompt_id)
+        table_data.append([prompt_id, accuracy, fpr, tpr, roc_auc])
+
+    print(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
     print(f"Total num_failed_queries: {num_failed_queries}")
+    with open(os.path.join(outdir_basename, "metrics.txt"), "w") as f:
+        f.write(tabulate(table_data, headers=headers, tablefmt="fancy_grid"))
+        f.write("\n")
+        f.write(f"Total num_failed_queries: {num_failed_queries}")
 
 
 def main(args):
