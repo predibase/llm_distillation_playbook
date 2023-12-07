@@ -73,6 +73,9 @@ def main():
         "test.indist.2": pd.concat([data_pool["test.b.ok.200"], data_pool["test.b.bad.200"].sample(frac=0.1)]),
         "test.balanced": pd.concat([data_pool["test.c.ok.200"], data_pool["test.c.bad.200"]]),
         "train.5.a": pd.concat([data_pool["train.a.ok.1k"], data_pool["train.a.bad.1k"].sample(frac=0.1)]),
+        "train.5k": get_subsets(train, 5000, nsubsets=1)[0],
+        "train.10k": get_subsets(train, 10000, nsubsets=1)[0],
+        "train.20k": get_subsets(train, 20000, nsubsets=1)[0],
     }
     dataset_subsets["train.5.b"] = pd.concat(
         [dataset_subsets["train.5.a"], data_pool["train.b.ok.1k"], data_pool["train.b.bad.1k"].sample(frac=0.1)]
