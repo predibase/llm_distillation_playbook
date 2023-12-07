@@ -34,14 +34,12 @@ PROMPTS = {
 Input text: '%s'
 
 Output:""",
-    "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
-
-1. 'reason_innocent': Provide a reason why the comment might be innocent. For parsing consistency, do not use any single or double quotes in your response string, even if the your text may be grammatically invalid.
-2. 'reason_toxic': Provide a reason why the comment might be toxic. For parsing consistency, do not use single or double quotes in your response string, even if the your text may be grammatically invalid.
-3. 'is_bad': Your final judgment on whether the comment is toxic or not. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
-
-Input text: '%s'
-Output:""",
+    #     "cot_prompt": """Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
+    # 1. 'reason_innocent': Provide a reason why the comment might be innocent. For parsing consistency, do not use any single or double quotes in your response string, even if the your text may be grammatically invalid.
+    # 2. 'reason_toxic': Provide a reason why the comment might be toxic. For parsing consistency, do not use single or double quotes in your response string, even if the your text may be grammatically invalid.
+    # 3. 'is_bad': Your final judgment on whether the comment is toxic or not. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
+    # Input text: '%s'
+    # Output:""",
     #     "cot_prompt": """For a well-intentioned content moderation app, we want to flag a comment if it may contain toxic, insulting, obscene, or threatening language. Given the input text, please classify its toxicity. Please format your response in the form of a python dictionary with the following keys:
     # 1. 'is_bad': If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
     # 2. 'reason': Provide an appropriate amount of detail for for your judgment.
@@ -73,8 +71,6 @@ def generate_synthetic_data(args):
             num_rows += 1
             row_id += 1
 
-    num_prompts = 2
-
     def make_requests():
         for row_id, values in data_file_dict.items():
             for prompt_id, prompt in PROMPTS.items():
@@ -98,7 +94,7 @@ def generate_synthetic_data(args):
     api.run_request_function(make_requests)
 
     # Parse results out.
-    with alive_bar(num_rows * num_prompts) as progress_bar:
+    with alive_bar(num_rows * len(list(PROMPTS.keys()))) as progress_bar:
         for result in api:
             try:
                 response = result.response["choices"][0]["message"]["content"]
