@@ -2,4 +2,4 @@ alive_progress
 openai
 pandas
 openai_multi_client
-dotenv
+python-dotenv
