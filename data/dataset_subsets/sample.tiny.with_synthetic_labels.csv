@@ -1,0 +1,210 @@
+id,simple_prompt,cot_prompt,id,comment_text,toxic,severe_toxic,obscene,threat,insult,identity_hate,is_bad,simple_prompt,cot_prompt
+de6c08e7779a4650,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or harmful content. It appears to be a string of timestamps and a link title with the word 'lol' at the end, which seems to be a casual or humorous remark.""
+}",de6c08e7779a4650,"17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC) 17:51, 5 Apr 2005 (UTC)Link titlelol",0,0,0,0,0,0,False,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or harmful content. It appears to be a string of timestamps and a link title with the word 'lol' at the end, which seems to be a casual or humorous remark.""
+}"
+3c9a35abdd92f64a,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not appear to contain any toxic or offensive content. It primarily discusses the swapping of sections and includes some criticisms of another account, but these do not warrant classification as toxic.""
+}",3c9a35abdd92f64a,"""
+
+October to November, 1868 (Custerwest)
+Gas and substitute by our (proper) Background section (based on the mil and gov websites version only).  
+
+The battle (Custerwest)
+Swap with our Battle section, based on the modern official account. Custerwest's contains the things which didn't happen, such as the discredited story of """"4 to 6 white captives"""" (discussed in detail before). I also noticed the version by Custerwest completely ommits civilian casalties (except the chief's wife).  
+
+The accounts of the battle (mostly pre-Custerwest)
+Swap with our Controversies.  
+
+Aftermath (ours)
+Addc.  
+
+Infobox
+Swap with ours - based only on the indiscussable things confirmed now, including what Custer said (which would be or not be true, but is not used in the today's estimates). Also, as always, only the government websites (AMH and Washita site). Also, I think it's more informative, and as the rest better written even (his is a mess).  """,0,0,0,0,0,0,False,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not appear to contain any toxic or offensive content. It primarily discusses the swapping of sections and includes some criticisms of another account, but these do not warrant classification as toxic.""
+}"
+946754f03a39ef83,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or offensive language. It appears to be a legitimate question asking for information about a specific song.""
+}",946754f03a39ef83,"Sample question 
+
+does anyone know where the war sample at the start of Take It Back is from?",0,0,0,0,0,0,False,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or offensive language. It appears to be a legitimate question asking for information about a specific song.""
+}"
+5d6ce6f49dd19b2a,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or offensive language or behavior. It seems to be a description or explanation of a task the user is performing, without any harmful or offensive intent. The mention of downloading a file, entering data, structuring information, and updating a database indicates a normal and non-toxic activity, with no indication of any harmful content.""
+}",5d6ce6f49dd19b2a,"I have downloaded the New Chronology (2005).xls from the Yahoo group and I have entered its data into my Local NC manager. Now I have to structure it so I can produce a new overview. I will also have to update my database, which will take quite some effort...",0,0,0,0,0,0,False,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or offensive language or behavior. It seems to be a description or explanation of a task the user is performing, without any harmful or offensive intent. The mention of downloading a file, entering data, structuring information, and updating a database indicates a normal and non-toxic activity, with no indication of any harmful content.""
+}"
+3e3d2e29642b7009,"{
+    ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text is not toxic. It mentions selling the soul to a dark Lord, but it is likely meant as a humorous or sarcastic statement. Additionally, the presence of the phrase 'thanks for the flowers' suggests a positive tone."" 
+}",3e3d2e29642b7009,"THE GODS 
+
+It's because I have sold my soul to the dark Lord, to whom I must always answer.
+
+But thanks for the flowers )",0,0,0,0,0,0,False,"{
+    ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text is not toxic. It mentions selling the soul to a dark Lord, but it is likely meant as a humorous or sarcastic statement. Additionally, the presence of the phrase 'thanks for the flowers' suggests a positive tone."" 
+}"
+d5cceeaee7b71505,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or harmful content. It is a statement expressing an opinion about the relevance of certain items to a specific section or subsection. There is no evidence of offensive language, personal attacks, or any form of toxicity."" 
+}",d5cceeaee7b71505,In my view they are all relevant to the section or subsection where they appear.,0,0,0,0,0,0,False,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic or harmful content. It is a statement expressing an opinion about the relevance of certain items to a specific section or subsection. There is no evidence of offensive language, personal attacks, or any form of toxicity."" 
+}"
+a970c7015e24ad65,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not appear to be toxic. It includes a description of a situation where the person left multiple messages without receiving a response and disagreed with another person's statement. While there might be some frustration expressed, there is no clear indication of toxic or harmful behavior."" 
+}",a970c7015e24ad65,"I had left him five messages on his talk page, without response.  On the article page, he had made a ridiculous statement  claiming that his was correct to delete Islamist because it was in the body of the article  but I pointed ou that the lede is a summary.",0,0,0,0,0,0,False,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not appear to be toxic. It includes a description of a situation where the person left multiple messages without receiving a response and disagreed with another person's statement. While there might be some frustration expressed, there is no clear indication of toxic or harmful behavior."" 
+}"
+64ae905a23ac64bb,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or harmful content. It appears to be a statement expressing a personal belief and acknowledging that the mentioned view has been quoted in various sources, sometimes critically. There is no evidence of any offensive, abusive, or harmful content present in the comment.""
+}",64ae905a23ac64bb,"I don't believe Prof Williams changed that view, although it's been quoted in a number of sources (often critically).",0,0,0,0,0,0,False,"{""is_bad"": 0}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or harmful content. It appears to be a statement expressing a personal belief and acknowledging that the mentioned view has been quoted in various sources, sometimes critically. There is no evidence of any offensive, abusive, or harmful content present in the comment.""
+}"
+53e8d9cb6659aab7,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or harmful behavior. It is a positive comment expressing support for a merge and mentioning other relevant information. There are no elements indicating any form of toxicity in the text.""
+}",53e8d9cb6659aab7,"I support the merge. Note that there is also an Albanian variant in article Byrek, which should also be merged in. I must say I share Dijxtra's thoughts...",0,0,0,0,0,0,False,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or harmful behavior. It is a positive comment expressing support for a merge and mentioning other relevant information. There are no elements indicating any form of toxicity in the text.""
+}"
+b0999a8d9c86cee3,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or offensive content. It is a response to unblocking someone on a platform and includes instructions regarding copyright. The text is informative and does not exhibit any harmful or abusive behavior.""
+}",b0999a8d9c86cee3,"Ok, you are unblocked. 
+
+Please read WP:C. In general, we can't use anything that has been previously published unless it is very old. If you have any copyright questions ask me, or leave a note at Wikipedia_talk:Copyright_problems. Duk",0,0,0,0,0,0,False,"{
+  ""is_bad"": 0
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text does not contain any toxic language or offensive content. It is a response to unblocking someone on a platform and includes instructions regarding copyright. The text is informative and does not exhibit any harmful or abusive behavior.""
+}"
+62e38775721eb79e,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains multiple instances of hate speech, explicit sexual content, and a reference to non-consensual sexual activity. The use of racial slurs, derogatory language towards a specific religious group, and the explicit mention of rape indicate a high level of toxicity in the comment.""
+}",62e38775721eb79e,"| decline=Niggers, jews, bad news! Also my cock is hard so it's time for rape lol 86.181.0.14",1,1,1,0,1,1,True,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains multiple instances of hate speech, explicit sexual content, and a reference to non-consensual sexual activity. The use of racial slurs, derogatory language towards a specific religious group, and the explicit mention of rape indicate a high level of toxicity in the comment.""
+}"
+f1b6c3c2a4290778,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains ableist language ('retard') which is offensive and derogatory towards individuals with intellectual disabilities. The use of this language is considered toxic and disrespectful.""
+}",f1b6c3c2a4290778,"No, you were trying to sound cool but ended up sounding like a retard.",1,0,0,0,1,0,True,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains ableist language ('retard') which is offensive and derogatory towards individuals with intellectual disabilities. The use of this language is considered toxic and disrespectful.""
+}"
+73d26c37c6790cbf,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text contains a statement related to someone's sexual orientation and sexual activity. However, it does not inherently display toxicity or harm towards any individual or group. Therefore, the comment is not classified as toxic.""
+}",73d26c37c6790cbf,EVula likes having gay sex with men!,1,0,0,0,0,1,True,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 0,
+  ""reason"": ""The input text contains a statement related to someone's sexual orientation and sexual activity. However, it does not inherently display toxicity or harm towards any individual or group. Therefore, the comment is not classified as toxic.""
+}"
+8b554bca6f3ac9d8,{'is_bad': 0},"{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains derogatory and offensive language ('JAPANESE', 'AMERICAN', 'madness'). It also demonstrates a biased and insensitive attitude towards a person's heritage and nationality.""
+}",8b554bca6f3ac9d8,"Its madness. Shes of Chinese heritage, but JAPANESE! Thats impossible, its like... if some one was of Irish heritage... and was born in America... would that make them... AMERICAN... That would imply that a persons nationality, is biased on where there born, and has little to do with those who came before them... madness",1,0,0,0,0,0,True,{'is_bad': 0},"{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains derogatory and offensive language ('JAPANESE', 'AMERICAN', 'madness'). It also demonstrates a biased and insensitive attitude towards a person's heritage and nationality.""
+}"
+34580fa8951c6fe0,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains explicit language and references to sexual activity, which can be considered toxic and inappropriate for many audiences.""
+}",34580fa8951c6fe0,also that waves are born from space because of the two big monster that they fucked on.Bold text,1,0,1,0,0,0,True,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains explicit language and references to sexual activity, which can be considered toxic and inappropriate for many audiences.""
+}"
+87e9cabee7c43e07,"{
+  ""is_bad"": 1
+}","{
+    ""is_bad"": 1,
+    ""reason"": ""The input text contains toxic language and aggressive behavior. The use of phrases like 'who the heck', 'crap', and 'FFS get a life' exhibit hostility and rudeness, which is not appropriate for a well-moderated content platform.""
+}",87e9cabee7c43e07,< who the heck wrote that crap _ explain why a forum devoted to Schapelle Corby should not be on her Wiki. What sets the other sites apart from mine ? My forum was the first and only Schapelle support site for months. Who the heck are you to say it should got here. You can remove it everyday and I will be back the next day to add it again. FFS get a life.,1,0,1,0,0,0,True,"{
+  ""is_bad"": 1
+}","{
+    ""is_bad"": 1,
+    ""reason"": ""The input text contains toxic language and aggressive behavior. The use of phrases like 'who the heck', 'crap', and 'FFS get a life' exhibit hostility and rudeness, which is not appropriate for a well-moderated content platform.""
+}"
+4001f43d06e5b8ad,{'is_bad': 1},"{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains hate speech and offensive language towards a specific group of people ('allied pigdogs'). It also references Auschwitz, a Nazi concentration camp known for the mass murder of millions of people during the Holocaust. The inclusion of such violent and discriminatory statements qualifies the comment as toxic.""
+}",4001f43d06e5b8ad,"all allied pigdogs deserve death in Auschwitz 
+
+fuck entente",1,0,1,1,1,0,True,{'is_bad': 1},"{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains hate speech and offensive language towards a specific group of people ('allied pigdogs'). It also references Auschwitz, a Nazi concentration camp known for the mass murder of millions of people during the Holocaust. The inclusion of such violent and discriminatory statements qualifies the comment as toxic.""
+}"
+75081c2821261827,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text includes offensive language and explicit sexual content. The use of profanity and a sexual reference in a disrespectful and aggressive manner demonstrates toxicity.""
+}",75081c2821261827,you seam like a fucking hot and kinky person and i would like to bang the shit out of you,1,0,1,0,1,0,True,"{
+  ""is_bad"": 1
+}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text includes offensive language and explicit sexual content. The use of profanity and a sexual reference in a disrespectful and aggressive manner demonstrates toxicity.""
+}"
+44ddd41a39cf01c5,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains profanity and aggressive language ('fuck off') and a mention of stalking, which can be considered toxic and offensive. Therefore, the text is classified as toxic.""
+}",44ddd41a39cf01c5,How about you fuck off and don't stalk my edits?  201.215.187.159,1,0,1,0,0,0,True,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains profanity and aggressive language ('fuck off') and a mention of stalking, which can be considered toxic and offensive. Therefore, the text is classified as toxic.""
+}"
+ae8057c0a6e0710c,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains derogatory terms (shemeless and my ass) and a username (RA0808) that suggests potential offensive or inappropriate behavior. Additionally, the inclusion of 'talkcontribs' implies that the user is engaging in disruptive or unproductive discussions. Therefore, the comment is classified as toxic.""
+}",ae8057c0a6e0710c,shemeless and my ass RA0808 talkcontribs,1,0,1,0,0,0,True,"{""is_bad"": 1}","{
+  ""is_bad"": 1,
+  ""reason"": ""The input text contains derogatory terms (shemeless and my ass) and a username (RA0808) that suggests potential offensive or inappropriate behavior. Additionally, the inclusion of 'talkcontribs' implies that the user is engaging in disruptive or unproductive discussions. Therefore, the comment is classified as toxic.""
+}"

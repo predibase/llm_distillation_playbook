@@ -1,5 +1,6 @@
 alive_progress
-openai
+openai==0.28
 pandas
 openai_multi_client
 python-dotenv
+scikit-learn
