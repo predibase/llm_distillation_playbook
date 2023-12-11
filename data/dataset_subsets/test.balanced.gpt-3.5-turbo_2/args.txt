@@ -1,1 +1,0 @@
-Namespace(outdir='data/dataset_subsets/', llm='gpt-3.5-turbo', input_file='data/dataset_subsets/test.balanced.csv', temperature='0.8')

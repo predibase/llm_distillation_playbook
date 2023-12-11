@@ -1,8 +1,0 @@
-Given the input text below, please determine if it is toxic. Please format your response in the form of a python dictionary with the following keys:
-
-1. 'reason_innocent': Provide a reason why the comment might be innocent. For parsing consistency, do not use any single or double quotes in your response string, even if the your text may be grammatically invalid.
-2. 'reason_toxic': Provide a reason why the comment might be toxic. For parsing consistency, do not use single or double quotes in your response string, even if the your text may be grammatically invalid.
-3. 'is_bad': Your final judgment on whether the comment is toxic or not. If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
-
-Input text: '%s'
-Output:

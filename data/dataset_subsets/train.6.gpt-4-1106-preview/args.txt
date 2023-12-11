@@ -1,0 +1,1 @@
+Namespace(outdir='data/dataset_subsets/', llm='gpt-4-1106-preview', input_file='data/dataset_subsets/train.6.csv', temperature='0.0')

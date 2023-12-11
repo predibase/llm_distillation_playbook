@@ -1,5 +1,0 @@
-Given the input text below, please classify whether it is toxic. Provide your classification in a JSON format with the key 'is_bad'. If the comment is indeed toxic, set is_bad=1, otherwise set is_bad=0.
-
-Input text: '%s'
-
-Output:
