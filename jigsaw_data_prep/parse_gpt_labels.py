@@ -1,4 +1,4 @@
-"""Prepare subset 5c and 5d of the Jigsaw dataset."""
+""""Script to parse GPT labels from the 'simple_prompt' column of the dataset."""
 
 import pandas as pd
 import ast
@@ -19,7 +19,7 @@ def find_is_bad_value(s):
         return None
 
 
-def keep_correct_generated_responses(df, prompt_output_column: str):
+def parse_gpt_labels_as_separate_column(df, prompt_output_column: str, parsed_is_bad_column_name: str):
     # Function to safely parse string as a Python dictionary and extract 'is_bad'
     def safe_eval(s):
         try:
@@ -34,35 +34,28 @@ def keep_correct_generated_responses(df, prompt_output_column: str):
                 return None
 
     # Parse strings safely and extract 'is_bad'
-    parsed_is_bad_column_name = f"{prompt_output_column}.parsed.is_bad"
     df[parsed_is_bad_column_name] = df[prompt_output_column].apply(safe_eval)
 
-    # Convert boolean 'is_bad' column to integer for comparison
     df["is_bad"] = df["is_bad"].astype(bool)
     df[parsed_is_bad_column_name] = df[parsed_is_bad_column_name].astype(bool)
 
-    # Filter out rows where the generated value is different from the ground truth.
-    df = df[df[parsed_is_bad_column_name] == df["is_bad"]]
     return df
 
 
 def main(argv):
-    data = pd.read_csv("data/dataset_subsets/train.5.b.gpt-4-1106-preview/train.5.b.gpt-4-1106-preview.with_labels.csv")
-    original_len = len(data)
+    dataset_paths = [
+        "data/dataset_subsets/train.5.a.gpt-4-1106-preview/train.5.a.gpt-4-1106-preview.with_labels.csv",
+        "data/dataset_subsets/train.5.b.gpt-4-1106-preview/train.5.b.gpt-4-1106-preview.with_labels.csv",
+        "data/dataset_subsets/train.6.gpt-4-1106-preview/train.6.gpt-4-1106-preview.with_labels.csv",
+        "data/dataset_subsets/train.5k.gpt-4-1106-preview/train.5k.gpt-4-1106-preview.with_labels.csv",
+        "data/dataset_subsets/train.10k.gpt-4-1106-preview/train.10k.gpt-4-1106-preview.with_labels.csv",
+        "data/dataset_subsets/train.5.c.csv",
+    ]
 
-    data = keep_correct_generated_responses(data, "simple_prompt")
-
-    data.to_csv("data/dataset_subsets/train.5.c.csv")
-    new_len = len(data)
-
-    print(f"Removed {original_len - new_len} rows.")
-
-    original_data = pd.read_csv("data/original_data/train.csv")
-
-    random_additional_data = original_data.sample(n=original_len - new_len)
-
-    equalized_data = pd.concat([data, random_additional_data])
-    equalized_data.to_csv("data/dataset_subsets/train.5.d.csv")
+    for dataset_path in dataset_paths:
+        data = pd.read_csv(dataset_path)
+        data = parse_gpt_labels_as_separate_column(data, "simple_prompt", "is_bad_gpt")
+        data.to_csv(dataset_path.replace(".csv", ".parsed.csv"))
 
 
 if __name__ == "__main__":
