@@ -4,6 +4,8 @@
 
 &dagger; Predibase, MLX team
 
+Inspired by the [Deep Learning Tuning Playbook](https://github.com/google-research/tuning_playbook).
+
 ## Table of Contents
 
 -   [Who is this document for?](#who-is-this-document-for)
