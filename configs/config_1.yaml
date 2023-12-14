@@ -1,0 +1,40 @@
+model_type: llm
+input_features:
+  - name: prompt
+    type: text
+    preprocessing:
+      max_sequence_length: null
+    column: prompt
+output_features:
+  - name: is_bad_gpt
+    type: text
+    preprocessing:
+      max_sequence_length: null
+    column: is_bad_gpt
+prompt:
+  template: >-
+    Given the input text below, classify whether it is toxic. If the input text
+    is toxic, return 'true', otherwise return 'false'.
+
+    Input text: {comment_text}
+
+    Output:
+preprocessing:
+  global_max_sequence_length: 2048
+adapter:
+  type: lora
+generation:
+  max_new_tokens: 3
+trainer:
+  type: finetune
+  epochs: 10
+  batch_size: 12
+  learning_rate: 0.00016
+  eval_batch_size: 12
+  learning_rate_scheduler:
+    decay: cosine
+    warmup_fraction: 0.03
+  gradient_accumulation_steps: 1
+  enable_gradient_checkpointing: true
+base_model: meta-llama/Llama-2-7b-chat-hf
+ludwig_version: 0.9.dev
