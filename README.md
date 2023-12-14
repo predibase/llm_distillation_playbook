@@ -1,72 +1,86 @@
-# 📘 LLM Distillation Playbook: 12 Best Practices from Real Experiments
+# LLM Distillation Playbook
 
-## 🚀 Get Started
+**Justin Zhao<sup>&dagger;</sup>, Wael Abid<sup>&dagger;</sup>**
 
-### Open Source
+&dagger; Predibase, MLX team
 
-Fine-tune LLMs like a pro: Our open-source Ludwig makes it easy to adapt LLMs to your specific needs, all in a YAML file. No need to code everything from scratch! Check out our [getting started guide](https://ludwig.ai/latest/getting_started/llm_finetuning/). We provide sample configs under `configs/` to help you kick off experiments quickly.
+## Table of Contents
 
-Serve them at scale: LoRaX handles serving thousands of LLMs simultaneously, effortlessly. Check out our GitHub repository: [LoRaX](https://github.com/predibase/lorax)
+-   [Who is this document for?](#who-is-this-document-for)
+-   [Why a distillation playbook?](#why-a-distillation-playbook)
+-   [Commitment to open source](#commitment-to-open-source)
+-   [Best practices](#best-practices)
 
-### Fully-Managed
+## Who is this document for?
 
-Get started in minutes: No need to build everything yourself. Our managed platform provides everything you need to train and serve LLMs with ease. Sign up for a [free trial](https://predibase.com/)!
+This document is for engineers and ML practitioners interested in **LLM distillation**. We assume basic knowledge of language models and deep learning concepts.
 
-🚀 Start distilling LLMs today with our comprehensive playbook and tools! 🧪✨
+Our emphasis is on the **model distillation** and the efficient deployment of adapter-based fine-tuned open source models.
 
-## A Practical Guide to Distilling LLMs
+## Why a distillation playbook?
 
-- 📊 **Data Quality is King:** The quality of your training dataset is paramount. We saw significant performance improvements with every step up in data quality.
+As large language models (LLMs) become increasingly capable and integral to various applications, the need for their efficient, smaller counterparts has never been more pronounced. This shift is driven by the compelling performance of LLMs, juxtaposed with the significant costs, resource demands, and slower operational speeds of large models. In response, distilling these models into more efficient, smaller versions presents a solution that balances capability with cost-effectiveness and speed.
 
-- 📏 **Quantity Matters, but Quality Rules:** While larger datasets offer performance boosts, a smaller, high-quality dataset outperforms a large, lower-quality one.
+Despite significant interest in model distillation, we find that the state of the world that inspired the [tuning playbook](https://github.com/google-research/tuning_playbook/) has hardly changed. There is *still* an astonshing amount of toil and guesswork involved in actually getting deep neural networks to work well in practice, and this has continued onto the world of LLMs. Anecdotes and snippets of advice are spread across arxiv, huggingface, discord, substack, and social media, but how well these recommendations are centralized and systematized remains to be seen.
 
-- 🪄 **Hyperparameters do matter. Here's a quick guide to quickly find them so you can focus on data:**
-  - ⚙️ **Max out your GPU:** The larger the batch size, the faster your training.
-  - 🔄 **Learning Rate:** Experiment between 1e-5 and 5e-4. Cosine decay is a safe bet.
-  - 🎯 **Small Batch Size? No Problem:** Gradient accumulation reduces noise from small mini batches. It's important to adjust the learning rate. Doing it proportionally to (batch size * gradient accumulation steps) is a rule of thumb I follow.
+The advice in this document draws from our experience distilling language models at Google and Predibase, combined with any LLM research and media we could find on the topic to date. We are hopeful that these strategies for the efficient refinement of LLMs provide practitioners and enthusiasts with ideas that are practical, grounded in academic research, and helpful for the growing development and utilization of open source language models.
 
-### Guide to Your First Open Source LLM When You Don't Have Data:
+## Commmitment to open source
 
-- 👢 **Bootstrap your data:** Use a closed-source LLM (where allowed) to get started.
-- 💡 **Fine-tune an open-source LLM:** This fine-tuned model will pack a punch.
-- 📈 **Boost your data:** Refine your dataset by manually reviewing, dropping bad examples, and adding new ones. This will push your LLM beyond the closed-source model.
+At Predibase, we believe that the future is fine-tuned, specialized, and open source LLMs. Open source is in the DNA of the company, and as a company we maintain:
 
-## LLM Fine-Tuning Best Practices
+- [Ludwig](https://github.com/ludwig-ai/ludwig): Low-code framework for building custom LLMs, neural networks, and other AI models
+- [LoRAX](https://github.com/predibase/lorax): Multi-LoRA inference server that scales to 1000s of fine-tuned LLMs
+- [Horovod](https://github.com/horovod/horovod): Distributed training framework for TensorFlow, Keras, PyTorch, and Apache MXNet.
 
-The need for smaller, efficient versions of large language models (LLMs) is rising rapidly. Despite their impressive capabilities, LLMs can be costly, resource-intensive, and slow. Distilling these models into smaller, more efficient counterparts offers a compelling solution, balancing capability with cost and speed.
+Our managed platform is built on top of these repositories, and you can sign up for a free trial [here](https://predibase.com/).
+
+## Best practices
 
 ### 1. Understand the limitations of smaller models.
-- Despite being a popular technique, model distillation is not guaranteed to work well in all cases, which depends on the task and data.
+
+Despite being a popular technique, model distillation is not guaranteed to work well in all cases, which depends on the task and data.
 
 ### 2. Build good logging infrastructure.
-- Have basic logging infrastructure for teacher models in production. If logs are limited due to low traffic, PII, or other constraints, purely synthetic data generation may be a viable option.
+
+Have basic logging infrastructure for teacher models in production. If logs are limited due to low traffic, PII, or other constraints, purely synthetic data generation may be a viable option.
 
 ### 3. Define clear evaluation criteria.
-- Effective evaluation of distilled models requires clearly defined criteria that align with your specific application's needs. The choice of evaluation metrics should reflect the nature of the problem and the desired outcomes of the model.
+
+Effective evaluation of distilled models requires clearly defined criteria that align with your specific application's needs. The choice of evaluation metrics should reflect the nature of the problem and the desired outcomes of the model.
 
 ### 4. Maximize the quality of your teacher model.
-- The quality of your teacher model's outputs serves as an upper limit for the performance of your distilled student model. Invest in maximizing the quality of your teacher model's performance as much as possible.
+
+The quality of your teacher model's outputs serves as an upper limit for the performance of your distilled student model. Invest in maximizing the quality of your teacher model's performance as much as possible.
 
 ### 5. Use auxiliary techniques to maximize data quality offline.
-- To give your student models an edge, consider how you might fundamentally improve the quality of your data with manual labeling, rules-based filtering, auxiliary model ranking, or LLM chaining.
+
+To give your student models an edge, consider how you might fundamentally improve the quality of your data with manual labeling, rules-based filtering, auxiliary model ranking, or LLM chaining.
 
 ### 6. The best datasets are diverse and balanced.
-- Try to make your dataset as diverse, non-repetitive, and balanced as you can. The more scenarios and complexities your dataset covers, the more likely the distilled student will generalize and be unbiased.
+
+Try to make your dataset as diverse, non-repetitive, and balanced as you can. The more scenarios and complexities your dataset covers, the more likely the distilled student will generalize and be unbiased.
 
 ### 7. Start small. No, smaller.
-- Start with smaller, simpler model configurations that are quick to train so that you can debug issues with your setup, iterate quickly, and establish good benchmarks for comparing to more complex model configurations later.
+
+Start with smaller, simpler model configurations that are quick to train so that you can debug issues with your setup, iterate quickly, and establish good benchmarks for comparing to more complex model configurations later.
 
 ### 8. Assess the marginal utility of having more data.
-- To answer the question of how much data do you need for fine-tuning, run an ablation of varying dataset size and extrapolate.
+
+To answer the question of how much data do you need for fine-tuning, run an ablation of varying dataset size and extrapolate.
 
 ### 9. Consider how you want to serve your fine-tuned models.
-- While not crucial to decide upfront, have a model serving plan in mind to prioritize experiments with models that can ultimately be served.
+
+While not crucial to decide upfront, have a model serving plan in mind to prioritize experiments with models that can ultimately be served.
 
 ### 10. Experiment broadly, one parameter at a time.
-- Exploration over exploitation: spend most of your time and energy to gain insight into the problem. Change one variable at a time, and try not to rathole.
+
+Exploration over exploitation: spend most of your time and energy to gain insight into the problem. Change one variable at a time, and try not to rathole.
 
 ### 11. Actually look at the model’s mistakes.
-- While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, there is unparalleled value in manually reviewing individual examples of your model's outputs.
+
+While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, there is unparalleled value in manually reviewing individual examples of your model's outputs.
 
 ### 12. Monitor your models in production and A/B test them with real users.
-- While test sets provide a controlled environment for evaluation, the true test of your model’s effectiveness is how it performs with actual users and real-time inputs. Deploy your model and observe its performance in a real-world setting!
+
+While test sets provide a controlled environment for evaluation, the true test of your model’s effectiveness is how it performs with actual users and real-time inputs. Deploy your model and observe its performance in a real-world setting!
