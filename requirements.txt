@@ -6,3 +6,5 @@ python-dotenv
 scikit-learn
 tabulate
 streamlit
+fsspec
+s3fs
