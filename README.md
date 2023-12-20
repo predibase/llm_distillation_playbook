@@ -335,6 +335,12 @@ It's important to consider the serving architecture early in the model developme
 
 While full fine-tuning with larger models might yield the highest absolute quality, the trade-off in terms of increased costs or serving latency might not justify the marginal gains in performance.
 
+<details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
+
+TODO
+
+</details>
+
 ### Experiment broadly, one parameter at a time.
 
 ***Summary:** Exploration over exploitation: spend most of your time and energy to gain insight into the problem. Change one variable at a time, and try not to rathole.*
@@ -361,6 +367,12 @@ The following suggestions came about as we tried to crystalize our own approach 
 | Training strategy      | Curriculum learning                 | ★★★★              | ★★★             | ★★★★★      | Progressive learning, also known as curriculum learning, is a training strategy where the model is fine-tuned in a series of stages, each with a different kind of training data, typically progressing from more general or noisier data to more specific, high-quality, or in-domain data. Progressive learning mirrors the natural way humans learn: starting from broad concepts and gradually focusing on more specific and complex ideas. Example of progressive learning from [orca-2](https://arxiv.org/abs/2311.11045): ![img](images/curriculum_learning.png) |
 | Training strategy      | RLHF/RLAIF/DPO                      | ★★★★              | ★★★★★           | ★★★★★      | RLHF/RLHAIF/DPO, also called "preference tuning" where the model undergoes reinforcement learning to align better to human preferences. This was originally popularized by OpenAI, however it's extremely costly, and seems like a last mile optimization. We have yet to speak with a company who has a critical need for this level of optimization. High-level diagram of [RLHF vs. RLAIF](https://arxiv.org/abs/2309.00267): ![img](images/rlhf.png)                                                                                                                |
 
+<details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
+
+TODO
+
+</details>
+
 ### Look at the model's individual mistakes.
 
 ***Summary:** While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, Manually reviewing examples of your model's outputs brings unparalleled value for a deeper qualitative understanding of model performance.*
@@ -374,6 +386,12 @@ Especially in generative contexts where model performance can't be neatly summar
 ![img](images/llm_loss_curves.png)
 
 <p align="center" ><i>Loss curves for fine-tuned LLMs will all look like this, yet the qualitative differences between these checkpoints can be substantial.</i></p>
+
+<details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
+
+TODO
+
+</details>
 
 ### Monitor your models in production and A/B test them with real users.
 
