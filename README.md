@@ -43,7 +43,7 @@ Everyone is building their prototype using large language models, however as LLM
 
 This shift is driven by the compelling performance of LLMs, juxtaposed with the significant costs, resource demands, and slower operational speeds of large models. In response, distilling these models into more efficient, smaller versions presents a solution that balances capability with cost-effectiveness and speed.
 
-Despite significant interest in model distillation, we find there is still an astonshing amount of toil and guesswork involved in actually getting distilled models to work well in practice. Anecdotes and snippets of advice are spread across arxiv, huggingface, discord, substack, and social media, but the systemization and centralization of these recommendations remains to be seen.
+Despite significant interest in model distillation, we find there is still an astonishing amount of toil and guesswork involved in actually getting distilled models to work well in practice. Anecdotes and snippets of advice are spread across arxiv, huggingface, discord, substack, and social media, but the systemization and centralization of these recommendations remains to be seen.
 
 The advice in this document draws from our experience distilling language models at Google and Predibase, combined with any SLM/LLM research we could find on the topic. We are hopeful that these strategies for the efficient refinement of LLMs provide practitioners and enthusiasts with ideas that are practical, grounded in academic research, and helpful for the growing development and utilization of open source language models.
 
