@@ -33,30 +33,32 @@
 
 ## Who is this document for?
 
-This document is for engineers and ML practitioners interested in **LLM distillation** for production applications. We assume familiarity with language models, deep learning fundamentals, and LLMs. While the advice in this guide is adaptable to other settings like academic research, our focus lies on efficiently building productionizing distilled LLMs.
+This document is for engineers and ML practitioners interested in **LLM distillation** for production applications. We assume familiarity with deep learning fundamentals and large language models (LLMs). While the advice in this guide is adaptable to other settings like academic research, our focus is on how to most effectively distill LLMs for production applications.
 
 ## Why a distillation playbook?
 
 Almost every organization we’ve worked with has built at least one novel internal application using LLMs; one larger company we spoke to had built 70 prototypes in a week. 
 
-Everyone is building their prototype using large language models, however as large language models (LLMs) become increasingly capable and integral to various applications, the need for their efficient, smaller counterparts has never been more pronounced.
+Everyone is building their prototype using large language models, however as LLMs become increasingly capable and integral to various applications, the need for more efficient, smaller counterparts has never been more pronounced.
 
 This shift is driven by the compelling performance of LLMs, juxtaposed with the significant costs, resource demands, and slower operational speeds of large models. In response, distilling these models into more efficient, smaller versions presents a solution that balances capability with cost-effectiveness and speed.
 
-Despite significant interest in model distillation, we find there is still an astonshing amount of toil and guesswork involved in actually getting large language models and model distillation to work well in practice. Anecdotes and snippets of advice are spread across arxiv, huggingface, discord, substack, and social media, but the systemization of these recommendations remains to be seen.
+Despite significant interest in model distillation, we find there is still an astonshing amount of toil and guesswork involved in actually getting distilled models to work well in practice. Anecdotes and snippets of advice are spread across arxiv, huggingface, discord, substack, and social media, but the systemization and centralization of these recommendations remains to be seen.
 
-The advice in this document draws from our experience distilling language models at Google and Predibase, combined with any LLM research and media we could find on the topic to date. We are hopeful that these strategies for the efficient refinement of LLMs provide practitioners and enthusiasts with ideas that are practical, grounded in academic research, and helpful for the growing development and utilization of open source language models.
+The advice in this document draws from our experience distilling language models at Google and Predibase, combined with any SLM/LLM research we could find on the topic. We are hopeful that these strategies for the efficient refinement of LLMs provide practitioners and enthusiasts with ideas that are practical, grounded in academic research, and helpful for the growing development and utilization of open source language models.
+
+This is a living document. We anticipate making periodic improvements, both small and large. If you’d like to be notified, please watch our repository (see [instructions](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/configuring-notifications#configuring-your-watch-settings-for-an-individual-repository)).
 
 ## Commmitment to open source
 
-At Predibase, we believe that the future is fine-tuned, specialized, and **open source** LLMs. Open source is in the DNA of the company, and as a company we maintain:
+At Predibase, we believe that the future is fine-tuned, specialized, and **open source** LLMs. Open source is in the DNA of the company. As a company, we maintain:
 
 - [Ludwig](https://github.com/ludwig-ai/ludwig): Low-code framework for building custom LLMs, neural networks, and other AI models.
 - [LoRAX](https://github.com/predibase/lorax): Multi-LoRA inference server that scales to 1000s of fine-tuned LLMs.
 
 <details><summary><em>[More about Predibase]</em></summary>
 
-Predibase is simply a [managed platform](https://predibase.com) that's built on top of open source. If you are interested in a managed solution for fine-tuning and deploying LLMs, you can sign up for a free trial [here](https://predibase.com).
+Predibase is a [managed platform](https://predibase.com) that's built on top of open source. If you are interested in a managed solution for fine-tuning and deploying LMs, you can sign up for a free trial [here](https://predibase.com).
 
 </details>
 
@@ -68,11 +70,11 @@ Before we delve into the best practices for distilling large language models (LL
 
 <p align="center" ><i>Illustration of model distillation. <a href=https://magazine.sebastianraschka.com/p/research-papers-in-november-2023>Image source</a>.</i></p>
 
-**Model distillation** enables the refinement and compression of large language models into more manageable, cost-effective versions without significant loss in performance. 
+**Model distillation** enables the refinement and compression of large language models into more manageable, cost-effective versions without a significant loss in performance. 
 
-**Large Language Models (LLMs)**: Advanced AI models trained on vast amounts of text data like [ChatGPT](https://chat.openai.com/). They seem to have a deep understanding of language, and can be trained to follow instructions or other tasks involving text.
+**Large Language Models (LLMs)**: Advanced AI models (see [full list](https://github.com/Hannibal046/Awesome-LLM)) trained on vast amounts of text data. They seem to have a deep understanding of language, and can be trained to follow instructions or other tasks involving text.
 
-**Teacher Model**: A capable larger model we aim to transfer to the smaller model.
+**Teacher Model**: A capable larger model that we aim to transfer to the smaller model.
 
 **Student Model**: The smaller model that the teacher model is distilled into.
 
@@ -84,26 +86,26 @@ Before we delve into the best practices for distilling large language models (LL
 
 There is substantial and growing evidence that smaller models outperform zero-shot and few-shot GPT-4 when fine-tuned on golden labels ([1](https://predibase.com/blog/how-to-fine-tune-llama-70b-for-structured-json-generation-with-ludwig), [2](https://www.anyscale.com/blog/fine-tuning-llms-lora-or-full-parameter-an-in-depth-analysis-with-llama-2)). However, due to their limited size, smaller models might not capture the full depth and nuance of language as effectively as their larger counterparts.
 
-In a canonical model distillation set up where the student model is trained on the raw outputs of the teacher model (also called imitation learning), it's more often the case that the student model will, at best, match the teacher model's quality. 
+In a canonical model distillation set up where the student model is trained on the raw outputs of the teacher model (also called imitation learning), it is more often the case that the student model will, at best, match the teacher model's quality. 
 
-In [The False Promise of Imitating Proprietary LLMs](https://arxiv.org/abs/2305.15717), researchers found that for certain tasks, smaller student models were only able to successfully mimicked teachers' style while falling short on factual correctness.
+In [The False Promise of Imitating Proprietary LLMs](https://arxiv.org/abs/2305.15717), researchers found that for certain tasks, smaller student models deceptively learned to mimic their teachers' style while falling short on factual correctness.
 
 <p align="center" >
     <img src="images/spectrum_nlp_tasks.png" />
     <p align="center" ><i>Spectrum of NLP tasks. The broader the domain and higher required precision, the more difficult the problem, and the less likely distillation will "just work".</i></p>
 </p>
 
-In truth, the effectiveness of model distillation depends largely on the specific task. Students are likely more disadvantaged than their larger pre-trained teachers when it comes to tasks that require substantial reasoning abilities. Conversely, for tasks that are straightforward and narrowly defined, out-of-the-box imitation learning may be entirely adequate for attaining quality competitive with the teacher model.
+In truth, the effectiveness of model distillation depends largely on the specific task and data. Students are likely more disadvantaged than their larger pre-trained teachers when it comes to tasks that span broader domains or require substantial reasoning abilities. Conversely, for tasks that are straightforward and narrowly defined, out-of-the-box imitation learning may be entirely adequate for attaining competitive student models.
 
 <details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
 
-To provide evidence best practices described in this document, we will use the Jigsaw toxicity classification dataset as a testbed.
+To demonstrate and contextualize the best practices of LLM distillation that we will explore in the subsequent sections of this post, we use the [Jigsaw toxic comment classification dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge).
 
 The [Jigsaw dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) was created to train models to classify offensive comments. It consists of 160K real comments from the internet and has a mix of offensive and non-offensive examples.
 
-The original dataset contains fine-grained labels for each comment: <code>toxic</code>, <code>severe_toxic</code>, <code>obscene</code>, <code>threat</code>, <code>insult</code>, and <code>identity_hate</code>. We collapse all the columns into one column <code>is_bad</code> to obtain a binary classification dataset.[^1]
+The original dataset contains fine-grained labels for each comment: `toxic`, `severe_toxic`, `obscene`, `threat`, `insult`, and `identity_hate`. We collapse all the columns into one column `is_bad` to obtain a binary classification dataset.[^1]
 
-[^1]: While there are established state-of-the-art (SOTA) text classification models [specifically designed for the Jigsaw dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/leaderboard), our intention here is not to surpass these benchmarks. Rather, we utilize this dataset as an illustrative tool to concretely demonstrate and contextualize the best practices of LLM distillation that we will explore in the subsequent sections of this post.
+[^1]: While there are established state-of-the-art (SOTA) text classification models [specifically designed for the Jigsaw dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/leaderboard), our intention here is not to surpass these benchmarks. Rather, we utilize this dataset as an illustrative tool to demonstrate and contextualize the best practices of LLM distillation.
 
 ![img](images/zs_vs_finetuned.png)
 <p align="center" ><i>Model accuracy on a balanced test set comparing zero-shot performance of GPT-* models with OSS LLMs fine-tuned using a random subset of 10K examples.</i></p>
@@ -112,20 +114,20 @@ The original dataset contains fine-grained labels for each comment: <code>toxic<
 
 ### 2. Build good logging infrastructure.
 
-***Summary**: Have basic logging infrastructure for teacher models in production. If logs are limited due to low traffic, PII, or other constraints, synthetic data generation may be a viable option for dataset bootstrapping.*
+***Summary**: Have basic logging infrastructure for your LLMs in production. If logs are limited due to low traffic, PII, or other constraints, synthetic data generation may be a viable option for bootstrapping a dataset for fine-tuning.*
 
 If you haven't already implemented logging in your application, you really should. Tokens are expensive and [data is oil](https://www.quora.com/Who-should-get-credit-for-the-quote-data-is-the-new-oil). 
 
 <p align="center" >
     <img src="images/logging.png" />
-    <p align="center" ><i>Example of basic LLM logging infrastructure with a Model-as-a-Service (MaaS) serverless teacher model. Stream requests and responses from your MaaS endpoint to a storage solution like Amazon S3 or a Snowflake table.</i></p>
+    <p align="center" ><i>Example of basic logging infrastructure with a Model-as-a-Service (MaaS) serverless teacher model. Stream requests and responses from your MaaS endpoint to a storage solution like Amazon S3 or Snowflake.</i></p>
 </p>
 
 #### Bootstrap datasets with real logs.
 
-Collecting logs from production traffic that's sent to your teacher models is a great, lean option for bootstrapping a dataset for distilling fine-tuned models.[^2]
+Collecting logs from production traffic that's sent to your teacher models is a great, lean option for bootstrapping a dataset for fine-tuning.[^2]
 
-[^2]: Always review the terms of service and usage policies of LLM providers when logging their outputs for distillation. Compliance with these policies is essential. While OpenAI currently does not appear to restrict the use of their models for academic or experimental work, it's advisable to seek clarification for specific use cases.
+[^2]: Always review the terms of service and usage policies of LLM providers when logging their outputs. While OpenAI permits the use of their models for academic or exploratory work, it's advisable to seek clarification for specific use cases and production settings.
 
 See a lightweight example of asynchronously logging requests and responses to S3 in a streamlit app [here](https://github.com/predibase/llm_distillation_playbook/tree/main/app).
 
@@ -148,27 +150,25 @@ Papers like [Self-Instruct](https://arxiv.org/abs/2212.10560), [Alpacare](https:
 
 This is a well-known best practice for machine learning, but it's worth reiterating because it's so important.
 
-**Tailoring evaluation to the application**: Effective evaluation of distilled models (or any model) requires clearly defined criteria that align with your specific application's needs. For instance, LLMs for JSON generation tasks might focus on checking for schema adherence, extraction tasks might focus on accuracy or recall, and other language generation tasks might use BLEURT, ROUGE, or perplexity. The key is to select metrics that best represent the success of the model in its intended environment.
+**Tailoring evaluation to the application**: Effective evaluation requires clearly defined criteria that align with your specific application's needs. For instance, LLMs for JSON generation tasks might focus on checking for schema adherence, extraction tasks might focus on accuracy or recall, and other language generation tasks might use BLEURT, ROUGE, or perplexity. The key is to select metrics that best represent the success of the model in its intended environment.
 
-**The emergence of LLMs as judges**: There's a growing trend of using LLMs themselves to assess model outputs, especially in scenarios where traditional metrics might fall short or where manual evaluation by human raters is too expensive. This approach can be compelling but requires [careful consideration](https://arxiv.org/abs/2306.05685) to account for LLM biases.
+**The emergence of LLMs as judges**: There's a growing trend of using LLMs themselves to assess model outputs, especially in scenarios where traditional metrics might fall short or where manual evaluation by human raters is too expensive. This approach can be compelling but requires [careful consideration](https://arxiv.org/abs/2306.05685) to account for potential LLM biases.
 
-**Consistency and diversity in test sets**: Establishing clear test sets is critical. These sets should be diverse enough to cover various aspects of model performance yet consistent enough to allow for reliable tracking over time. Avoid changing your test sets frequently, as consistency is key to comparing performance across different models and iterations.
+**Consistency and diversity in test sets**: Establishing clear test sets is critical. These sets should be diverse enough to cover various aspects of model performance yet consistent enough to allow for reliable tracking over time. Avoid changing your test sets frequently, as consistency is key when comparing performance across different models and iterations.
 
 <details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
 
-The original [Jigsaw dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) contains fine-grained labels for each comment: <code>toxic</code>, <code>severe_toxic</code>, <code>obscene</code>, <code>threat</code>, <code>insult</code>, and <code>identity_hate</code>. We collapse all the columns into one column <code>is_bad</code> to obtain a binary classification dataset.
+Sampling a test set randomly from the [Jigsaw dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) gives us a dataset with the distribution of: 90% non-toxic, 10% toxic.
 
-Sampling a test set randomly from this data gives us a dataset with the distribution of: 90% non-toxic, 10% toxic.
-
-While this distribution matches what we expect our application to receive (mostly non-toxic comments), we want to be sure that any model we put in production is equally good at detecting both offensive and non-offensive comments.
+This distribution might match what we expect our hypothetical application to receive (mostly non-toxic comments), we want to be sure that any model we put in production is equally good at detecting both offensive and non-offensive comments.
 
 ![img](images/jigsaw_test_sets.png)
 
-For this use case, let's formalize 2 different test sets:
-1. An in-distribution test set with 90% non-bad examples and 10% toxic examples, drawn from the original test set.
-2. An explicitly balanced test set with 50% non-toxic and 50% toxic examples, drawn from the original test set.
+Let's formalize 2 different test sets:
+1. `test-indist`: An in-distribution test set with 90% non-bad examples and 10% toxic examples, drawn from the original test set.
+2. `test-balanced`: An explicitly balanced test set with 50% non-toxic and 50% toxic examples, drawn from the original test set.
 
-By measuring models on both of these test sets simultaneously, we can observe how well a candidate model classifies toxic comments classification overall, as well as how well these classifications would fare in a traffic-realisitic setting.
+By measuring models on both of these test sets simultaneously, we can track how well a candidate model classifies comments overall, as well as how well these classifications would fare in a traffic-realisitic setting.
 
 </details>
 
@@ -181,7 +181,7 @@ By measuring models on both of these test sets simultaneously, we can observe ho
   <p align="center" ><i>Get your teacher model as good as it can be before feeding its outputs for the student to imitate.</i></p>
 </p>
 
-**Choose a good teacher:** The choice of the teacher model is a critical first step. Opt for a model that demonstrates the highest accuracy and understanding of your task. GPT-4 is generally great, but maybe there's a better foundation model out there for your use case, which may be better specialized on data similar to your task.
+**Choose a good teacher:** The choice of the teacher model is a critical first step. Opt for a model that demonstrates the highest accuracy and understanding of your task. GPT-4 is generally great, but it's worth checking to see if there's a better foundation model out there for your use case that may be better specialized to your task.
 
 | Metric          | zephyr-7b-alpha | Mixtral-8x7B-Instruct-v0.1 | Llama-2-70b-hf | Yi-34B-200K | CodeLlama-34b-Instruct-hf | GPT-3.5 | GPT-4 | Gemini     |
 | --------------- | :-------------: | :------------------------: | -------------- | ----------- | ------------------------- | ------- | ----- | ---------- |
@@ -202,11 +202,11 @@ By measuring models on both of these test sets simultaneously, we can observe ho
 
 <details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
 
-Varying the LLMs, prompts, and temperature, has a significant effect on the consistency of the label relative to human toxicity labels.
+Varying the LLMs, prompts, and temperature can a significant effect on teacher model accuracy.
 
 ![img](images/jigsaw_prompt_engineering_temperature.png)
 
-The best temperature for this dataset appears to be 0.0. A higher temperature boosts the creativity of the outputs of the LLM, which likely isn't useful in a binary classification setting.
+The best temperature for this dataset appears to be 0.0. This makes sense because a higher temperature boosts the creativity of the outputs of the LLM, which likely isn't useful in a binary classification setting.
 
 We highlight accuracy on `test-balanced` with two different prompts:
 
@@ -226,8 +226,6 @@ For a well-intentioned content moderation app, we want to flag a comment if it m
 1. 'is_bad': If the comment is indeed toxic, use set is_bad=1, otherwise set is_bad=0.
 2. 'reason': Provide an appropriate amount of detail for for your judgment.
 
-Think step by step.
-
 Input text: '%s'
 Output:
 ```
@@ -236,13 +234,14 @@ Here were our results:
 
 ![img](images/jigsaw_prompt_engineering_cot.png)
 
-A more sophisticated prompt does not always lead to better quality. The `simple_prompt` seems to be more aligned with human labels than a more sophisticated `Chain-of-Thought` prompt. The gap is smaller when using GPT-4. Perhaps the additional reasoning that is spurred by Chain-of-Thought prompting increases the rate of false positives.
+The `simple_prompt` seems to be more aligned with human labels than a more sophisticated `Chain-of-Thought` prompt.
+The quality gap between the two prompts is smaller when using GPT-4, however it does appear that a more sophisticated prompt does not always lead to better quality. Perhaps the additional reasoning that is spurred by Chain-of-Thought prompting increases the rate of false positives.
 
 </details>
 
 ### 5. Maximize the quality of your training data.
 
-***Summary:** If you can continue enhancing the quality of your training data, with or without involvement from teachers, you absolutely should. Consider how you might fundamentally improve the quality of your data with manual curation, rules-based filtering, scoring example quality, or teacher aggregation.*
+***Summary:** If you can continue enhancing the quality of your training data, with or without involvement from teachers, you absolutely should. Consider how you might fundamentally improve the quality of your data.*
 
 Most mistakes made by converged student models can be traced back to issues with the source data. For student models, addressing data quality issues at the source is typically more efficient than trying to correct these issues with auxiliary systems.
 
@@ -270,7 +269,7 @@ To assess the impact of data quality on model performance, we can derive 6 subse
 ![img](images/jigsaw_quality_experiment.png)
 <p align="center"><i>Model performance on a balanced test set.</i></p>
 
-Performance improves both when high-quality human-labeled examples are added as well as when incorrect teacher-labeled examples are removed.
+Performance improves both when we add high-quality human-labeled examples as well as when incorrect teacher-labeled examples are removed.
 
 </details>
 
@@ -282,12 +281,14 @@ One of the main challenges in creating a high-quality dataset is ensuring that t
 
 **Diversity** is important for several reasons: it exposes the language model to different cases that it needs to be able to handle, it reduces the risk of overfitting or memorizing specific patterns or solutions, and it increases the generalization and robustness of the model to unseen or novel situations.
 
-**Balance** is just as important. If certain cases are sparsely represented in the overall dataset, it may be challenging for your student model to learn these.
+**Balance** is just as important. If certain cases are sparsely represented in the overall dataset, it may be challenging for your student model to learn these effectively.
 
-![img](images/logs_diversity.png)
-<p align="center"><i>Datasets bootstrapped from real logs can also be variation and balance-deficient. Make sure that certain power users aren't overrepresented in your dataset. Debias logs with random mutation, send rare cases through paraphrasing or back-translation as a data augmentation step, or manually add missing cases.</i></p>
+<p align="center">
+  <img src="images/logs_diversity.png">
+  <p align="center"><i>Datasets bootstrapped from real logs can also be variation or balance-deficient. For logs-based datasets, having too many examples from power users could be detrimental to overall dataset representation. Debias logs with random mutation, augment rarer examples with paraphrasing or back-translation, or manually add missing cases.</i></p>
+</p>
 
-It's not essential to know or address all data distribution issues upfront, but it's useful to anticipate them. Trust that if you've picked good test sets, meaningful biases in student models should become apparent during evaluation, and these can often be addressed with adjustments to training data.
+It's not essential to know or address all data distribution issues upfront, but it is useful to anticipate them. Trust that if you've picked good test sets, meaningful biases in student models should become apparent during evaluation, and these can often be addressed with adjustments to training data.
 
 <details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
 
@@ -296,9 +297,9 @@ It's not essential to know or address all data distribution issues upfront, but 
 
 Perfectly balanced is not necessary, nor necessarily better.
 
-For example, it could be that the non-toxic examples are more difficult to detect than the toxic ones, so the model may very well benefit from having more examples of the more difficult class while having fewer examples of the easier classes.
+For example, it could be that the non-toxic examples are more difficult to detect than the toxic ones, so the model may very well benefit from having more examples of more difficult classes while having fewer examples of easier classes.
 
-In general, it’s hard to know what the best "balance" is upfront, or, for non-classification tasks, how to balance the dataset in the first place.
+Upfront, it's hard to know what the best "balance" is, or, for non-classification tasks, how to measure or productively change the balance of the dataset in the first place.
 
 The higher-level idea is that if you have good test set(s), then when you do model evaluation with (unintentionally) imbalanced training data, you’ll be able to spot bias patterns that clue you into dataset distribution adjustments.
 
@@ -308,19 +309,17 @@ The higher-level idea is that if you have good test set(s), then when you do mod
 
 ***Summary**: Start with smaller, simpler model configurations that are quick to train so that you can debug issues with your setup, iterate quickly, and establish good benchmarks for comparing to more complex model configurations later.*
 
-**Embrace the power of the smallest model.** Not just a matter of efficiency; it's a strategic approach to model development. Smaller, simpler models are significantly quicker to train and understand, allowing for the fastest iteration and feedback.
+**Embrace the power of the smallest, simplest model.** Not just a matter of efficiency; it's a strategic approach to model development. Smaller, simpler models are significantly quicker to train and understand, allowing for the fastest iteration and feedback.
 
 **Avoid the trap of cool, but complicated large models.**  One of the most common pitfalls in model training is starting with too large and too complex model configurations. These will be harder to understand, slow down iteration velocity, and extend experiment cycle times.
 
-**The value of naive baselines.** Always begin with naive, simple baseline models. These serve as a clear benchmark to measure the performance of latent more sophisticated model configurations.
+**The value of naive baselines.** Always begin with naive, simple baseline models. These serve as a clear benchmark to measure the performance of subsequent more sophisticated model configurations.
 
 ### 8. Assess the marginal utility of having more data.
 
-***Summary:** As a rule of thumb, meaningful fine-tuning results are often achieved with datasets ranging from a few hundred to tens of thousands of examples. To answer the question more concretely, run an ablation of varying dataset size and extrapolate.*
+***Summary:** Meaningful fine-tuning results are often achieved with datasets ranging from a few hundred to tens of thousands of examples as a rule of thumb. To answer the question more concretely for your task, run an ablation study varying dataset size and extrapolate.*
 
-> *"How much data do I need for fine-tuning my model?"* 
-> 
-> ~One of the most common questions that we get asked.
+> "How much data do I need for fine-tuning my model?" ~ One of the most common questions that we get asked.
 
 In earnest, it really depends, influenced by factors such as task difficulty, output variability, reasoning complexity, example length, task alignment with pre-training data, and hyperparameters. Some problems require minimal data for convergence, while others demand extensive training without converging at all.
 
@@ -328,7 +327,7 @@ To determine a good dataset size for your specific case, conduct an ablation exp
 
 Such experiments can reveal the marginal utility of having additional data for fine-tuning. If increasing data quantity doesn't yield much improvement, it's advisable to reevaluate other aspects of the training pipeline to identify potential areas for enhancement.
 
-If you do find that the marginal utility of having more data is high, then consider text data augmentation techniques like [back translation](https://github.com/QData/TextAttack), or getting more data synthetically or manually.
+If you do find that the marginal utility of having more data is high, then consider data augmentation techniques like [back translation](https://github.com/QData/TextAttack), manually annotating more data.
 
 <details><summary><em>[Case study: Jigsaw toxic comment classification]</em></summary>
 
@@ -347,12 +346,12 @@ If you are planning to deploy multiple LLMs in production, it's beneficial to ex
 
 [The LoRA Exchange (LoRAX)](https://github.com/predibase/lorax), for example, is a serving solution optimized for serving numerous fine-tuned models using shared GPU resources. LoRAX stands out from traditional large language model serving methods by its ability to accommodate over a hundred task-specific, fine-tuned models on a single GPU. This capability significantly reduces the cost and complexity of serving fine-tuned models. LoRaX is especially suited for parameter-efficient fine-tuned models, offering a streamlined solution for deployment.
 
+While full fine-tuning with larger models might yield the highest absolute quality, the trade-off in terms of increased costs or serving latency might not justify the marginal gains in performance.
+
 ![img](images/lorax.png)
 <p align="center" ><i>Serving adapter-based LLMs with LoRAX.</i></p>
 
-It's important to consider the serving architecture early in the model development process. The type of model you choose can greatly influence how it will be served, its performance in production, and prioritizing experiments.
-
-While full fine-tuning with larger models might yield the highest absolute quality, the trade-off in terms of increased costs or serving latency might not justify the marginal gains in performance.
+Consider the target serving architecture early in the model development process. The type of model you choose may greatly influence how it will be served and should inform how to prioritize experiments.
 
 ### 10. Experiment broadly, one parameter at a time.
 
@@ -364,7 +363,7 @@ Tips for running lots of experiments at once:
 - Expect some toil and guesswork.
 - Optimize for iteration speed (simple -> complex, small -> large)
 
-The following suggestions came about as we tried to crystalize our own approach to fine-tuning LLMs. This is far from a comprehensive list, but here are some of our favorites.
+The following suggestions came about as we tried to crystalize our own approach to fine-tuning LLMs. This is far from a comprehensive list, but here are some of our favorite ideas for exploration.
 
 | Category               | Idea                                | Impact to Quality | Impact to Speed | Complexity | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | ---------------------- | ----------------------------------- | ----------------- | --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -382,7 +381,7 @@ The following suggestions came about as we tried to crystalize our own approach 
 
 ### 11. Look at the model's individual mistakes.
 
-***Summary:** While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, Manually reviewing examples of your model's outputs brings unparalleled value for a deeper qualitative understanding of model performance.*
+***Summary:** While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, manually reviewing examples of your model's outputs brings unparalleled value for a deeper qualitative understanding of model performance.*
 
 Especially in generative contexts where model performance can't be neatly summarized with a clear-cut metric, taking the time to delve into specific examples of where and how your model makes mistakes is not just a step in the evaluation process; it's a critical component of the model development journey.
 
@@ -403,14 +402,14 @@ Deploy and monitor your models in production… actually. Whether you are a rese
 #### Options for model deployment
 
 - **Live Experiment and Gradual Rollout:** Begin by directing a small percentage of traffic (e.g., 1%, then 10%) to the student model. Closely monitor changes in key application metrics like latency and user interactions before scaling up.
-- **Dark Launch:** Continue using the teacher model in production but route a portion of traffic to the student model in the background. Compare instances where the student model’s predictions differ from the teacher’s to evaluate its readiness.
+- **Dark Launch:** Continue using the teacher model in production but route a portion of traffic to the student model in the background. Compare instances where the student model’s predictions differ from the teacher’s to evaluate the student's quality readiness.
 - **Hybrid Launch:** If the teacher model outperforms the student model, consider a hybrid deployment. The student model can handle simpler, less resource-intensive queries, while the teacher model addresses more complex requests. This approach balances efficiency with quality.
 
 #### Infrastructure safeguards
 
 - **Monitor Inputs:** Fine-tuned models, being more specialized, can be sensitive to feature drift. 
 - **Monitor Outputs:** Establish failsafe mechanisms to scrutinize generated outputs. LLMs in production are often accompanied by rules-based or model-based systems to identify issues and trigger fallbacks. Be aware that using another LLM for output monitoring can add latency.
-- **Maintain Logs:** Continue logging the inputs and outputs of your production teacher and student models. These logs are invaluable for future model refinements or re-distillations.
+- **Maintain Logs:** Continue logging the inputs and outputs for any production LLMs. Logs will be invaluable for future model refinements or re-distillations.
 
 ## Contributing
 
@@ -419,5 +418,7 @@ We'd love to hear your feedback!
 - If you like the playbook, please [leave a star](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars#starring-a-repository)! You can also reach us by pinging the [Ludwig slack](https://ludwig-ai.slack.com/join/shared_invite/zt-mrxo87w6-DlX5~73T2B4v_g6jj0pJcQ) or the [LoRAX Discord](https://discord.gg/CBgdrGnZjy), or finding us on LinkedIn. Testimonials help us justify creating more resources like this.
 
 - If anything seems incorrect, please file an issue to start a discussion. For questions or other messages where an issue isn't appropriate, please open a new discussion topic on GitHub.
+
 - This is a living document. We anticipate making periodic improvements, both small and large. If you’d like to be notified, please watch our repository (see [instructions](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/configuring-notifications#configuring-your-watch-settings-for-an-individual-repository)).
+
 - Are there other best practices missing from this list? Feel free to create a PR! We promise to review your suggestions with expediency.
