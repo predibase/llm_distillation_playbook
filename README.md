@@ -105,6 +105,8 @@ The original dataset contains fine-grained labels for each comment: <code>toxic<
 ![img](images/zs_vs_finetuned.png)
 <p align="center" ><i>Model accuracy on a balanced test set comparing zero-shot performance of GPT-* models with OSS LLMs fine-tuned using a random subset of 10K examples.</i></p>
 
+</details>
+
 ### Build good logging infrastructure to bootstrap datasets with real logs. 
 
 ***Summary**: Have basic logging infrastructure for teacher models in production. If logs are limited due to low traffic, PII, or other constraints, synthetic data generation may be a viable option for dataset bootstrapping.*
