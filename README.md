@@ -13,19 +13,20 @@
   - [Commmitment to open source](#commmitment-to-open-source)
   - [Key Concepts](#key-concepts)
   - [Best practices](#best-practices)
-    - [Understand the limitations of smaller models.](#understand-the-limitations-of-smaller-models)
-    - [Build good logging infrastructure to bootstrap datasets with real logs.](#build-good-logging-infrastructure-to-bootstrap-datasets-with-real-logs)
-    - [Bootstrap datasets with synthetic data.](#bootstrap-datasets-with-synthetic-data)
-    - [Define clear evaluation criteria.](#define-clear-evaluation-criteria)
-    - [Maximize the quality of your teacher model.](#maximize-the-quality-of-your-teacher-model)
-    - [Maximize the quality of your training data.](#maximize-the-quality-of-your-training-data)
-    - [The best datasets are diverse and balanced.](#the-best-datasets-are-diverse-and-balanced)
-    - [Start simple and small.](#start-simple-and-small)
-    - [Assess the marginal utility of having more data.](#assess-the-marginal-utility-of-having-more-data)
-    - [Consider how you want to serve your student.](#consider-how-you-want-to-serve-your-student)
-    - [Experiment broadly, one parameter at a time.](#experiment-broadly-one-parameter-at-a-time)
-    - [Look at the model's individual mistakes.](#look-at-the-models-individual-mistakes)
-    - [Monitor your models in production and A/B test them with real users.](#monitor-your-models-in-production-and-ab-test-them-with-real-users)
+    - [1. Understand the limitations of smaller models.](#1-understand-the-limitations-of-smaller-models)
+    - [2. Build good logging infrastructure.](#2-build-good-logging-infrastructure)
+      - [Bootstrap datasets with real logs.](#bootstrap-datasets-with-real-logs)
+      - [Bootstrap datasets with synthetic data.](#bootstrap-datasets-with-synthetic-data)
+    - [3. Define clear evaluation criteria.](#3-define-clear-evaluation-criteria)
+    - [4. Maximize the quality of your teacher model.](#4-maximize-the-quality-of-your-teacher-model)
+    - [5. Maximize the quality of your training data.](#5-maximize-the-quality-of-your-training-data)
+    - [6. The best datasets are diverse and balanced.](#6-the-best-datasets-are-diverse-and-balanced)
+    - [7. Start simple and small.](#7-start-simple-and-small)
+    - [8. Assess the marginal utility of having more data.](#8-assess-the-marginal-utility-of-having-more-data)
+    - [9. Consider how you want to serve your student.](#9-consider-how-you-want-to-serve-your-student)
+    - [10. Experiment broadly, one parameter at a time.](#10-experiment-broadly-one-parameter-at-a-time)
+    - [11. Look at the model's individual mistakes.](#11-look-at-the-models-individual-mistakes)
+    - [12. Monitor your models in production and A/B test them with real users.](#12-monitor-your-models-in-production-and-ab-test-them-with-real-users)
       - [Options for model deployment](#options-for-model-deployment)
       - [Infrastructure safeguards](#infrastructure-safeguards)
   - [Contributing](#contributing)
@@ -77,7 +78,7 @@ Before we delve into the best practices for distilling large language models (LL
 
 ## Best practices
 
-### Understand the limitations of smaller models.
+### 1. Understand the limitations of smaller models.
 
 ***Summary**: Model distillation is an empirical science and is not guaranteed to work well in all cases. The effectiveness of model distillation depends on the task and data.*
 
@@ -87,8 +88,10 @@ In a canonical model distillation set up where the student model is trained on t
 
 In [The False Promise of Imitating Proprietary LLMs](https://arxiv.org/abs/2305.15717), researchers found that for certain tasks, smaller student models were only able to successfully mimicked teachers' style while falling short on factual correctness.
 
-![img](images/spectrum_nlp_tasks.png)
-<p align="center" ><i>Spectrum of NLP tasks. The broader the domain and higher required precision, the more difficult the problem, and the less likely distillation will "just work".</i></p>
+<p align="center" >
+    <img src="images/spectrum_nlp_tasks.png" />
+    <p align="center" ><i>Spectrum of NLP tasks. The broader the domain and higher required precision, the more difficult the problem, and the less likely distillation will "just work".</i></p>
+</p>
 
 In truth, the effectiveness of model distillation depends largely on the specific task. Students are likely more disadvantaged than their larger pre-trained teachers when it comes to tasks that require substantial reasoning abilities. Conversely, for tasks that are straightforward and narrowly defined, out-of-the-box imitation learning may be entirely adequate for attaining quality competitive with the teacher model.
 
@@ -107,29 +110,39 @@ The original dataset contains fine-grained labels for each comment: <code>toxic<
 
 </details>
 
-### Build good logging infrastructure to bootstrap datasets with real logs. 
+### 2. Build good logging infrastructure.
 
 ***Summary**: Have basic logging infrastructure for teacher models in production. If logs are limited due to low traffic, PII, or other constraints, synthetic data generation may be a viable option for dataset bootstrapping.*
 
-Collecting logs from production traffic to your teacher models is a great option for bootstrapping a dataset for distilling fine-tuned models.[^2]
+If you haven't already implemented logging in your application, you really should. Tokens are expensive and [data is oil](https://www.quora.com/Who-should-get-credit-for-the-quote-data-is-the-new-oil). 
+
+<p align="center" >
+    <img src="images/logging.png" />
+    <p align="center" ><i>Example of basic LLM logging infrastructure with a Model-as-a-Service (MaaS) serverless teacher model. Stream requests and responses from your MaaS endpoint to a storage solution like Amazon S3 or a Snowflake table.</i></p>
+</p>
+
+#### Bootstrap datasets with real logs.
+
+Collecting logs from production traffic that's sent to your teacher models is a great, lean option for bootstrapping a dataset for distilling fine-tuned models.[^2]
 
 [^2]: Always review the terms of service and usage policies of LLM providers when logging their outputs for distillation. Compliance with these policies is essential. While OpenAI currently does not appear to restrict the use of their models for academic or experimental work, it's advisable to seek clarification for specific use cases.
 
-![img](images/logging.png)
-<p align="center" ><i>Example of basic LLM logging infrastructure with a Model-as-a-Service (MaaS) serverless teacher model. Stream requests and responses from your MaaS endpoint to a storage solution like Amazon S3 or a Snowflake table.</i></p>
+See a lightweight example of asynchronously logging requests and responses to S3 in a streamlit app [here](https://github.com/predibase/llm_distillation_playbook/tree/main/app).
 
-### Bootstrap datasets with synthetic data.
+#### Bootstrap datasets with synthetic data.
 
 For applications with limited data either due to low traffic, PII, or other constraints, **synthetic data generation** may be a viable option for fine-tuning data.
 
-![img](images/synthetic_data_start.png)
-<p align="center" ><i>Bootstrap your dataset with synthetic data. The biggest challenge with synthetic data is to ensure that the examples produced are varied and non-repetitive.</i></p>
+<p align="center">
+  <img src="images/synthetic_data_start.png">
+  <p align="center" ><i>Bootstrap your dataset with synthetic data. The biggest challenge with synthetic data is to ensure that the examples produced are varied and non-repetitive.</i></p>
+</p>
 
 Papers like [Self-Instruct](https://arxiv.org/abs/2212.10560), [Alpacare](https://arxiv.org/pdf/2310.14558.pdf) or Microsoft's [phi-1](https://arxiv.org/pdf/2306.11644.pdf)/[phi-1.5](https://arxiv.org/pdf/2309.05463.pdf)/[phi-2](https://www.microsoft.com/en-us/research/blog/phi-2-the-surprising-power-of-small-language-models/) show how synthetic datasets, generated through creative variations of seed queries to GPT models, can be used to fine-tune compelling smaller models.
 
 > "We speculate that the creation of synthetic datasets will become, in the near future, an important technical skill and a central topic of research in AI." ~ [phi 1.5 technical report](https://arxiv.org/pdf/2309.05463.pdf)
 
-### Define clear evaluation criteria.
+### 3. Define clear evaluation criteria.
 
 ***Summary:** Effective evaluation of distilled models requires clearly defined criteria that align with your specific application's needs. The choice of evaluation metrics should reflect the nature of the problem and the desired outcomes of the model.*
 
@@ -159,12 +172,14 @@ By measuring models on both of these test sets simultaneously, we can observe ho
 
 </details>
 
-### Maximize the quality of your teacher model.
+### 4. Maximize the quality of your teacher model.
 
 ***Summary:** The quality of your teacher model's outputs serves as an upper limit for the performance of your distilled student model. Invest in maximizing the quality of your teacher model's performance as much as possible.*
 
-![img](images/student_and_teacher.png)
-<p align="center" ><i>Garbage in, garbage out. Make your teacher model as good as it can be before feeding its outputs for the student to imitate.</i></p>
+<p align="center">
+  <img src="images/student_and_teacher.png">
+  <p align="center" ><i>Get your teacher model as good as it can be before feeding its outputs for the student to imitate.</i></p>
+</p>
 
 **Choose a good teacher:** The choice of the teacher model is a critical first step. Opt for a model that demonstrates the highest accuracy and understanding of your task. GPT-4 is generally great, but maybe there's a better foundation model out there for your use case, which may be better specialized on data similar to your task.
 
@@ -178,8 +193,10 @@ By measuring models on both of these test sets simultaneously, we can observe ho
 | Winogrande      |      78.6       |            81.4            | 83.7           | 82.6        | 74.6                      | 65.8    | 87.1  | unreported |
 | GSM8K           |      14.0       |            60.7            | 54.1           | 61.6        | 38.0                      | 68.2    | 92.1  | 94.4       |
 
-![img](images/radial_teachers.png)
-<p align="center" ><i>Sources: <a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">Open LLM Leaderboard</a>, <a href="https://the-decoder.com/gpt-4-crushes-other-llms-according-to-new-benchmark-suite/">GPT-4 "crushes" other LLMs according to new benchmark suite</a>, <a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf">Gemini: A Family of Highly Capable Multimodal Models</a></i></p>
+<p align="center">
+  <img src="images/radar_teachers.png">
+  <p align="center" ><i>Sources: <a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">Open LLM Leaderboard</a>, <a href="https://the-decoder.com/gpt-4-crushes-other-llms-according-to-new-benchmark-suite/">GPT-4 "crushes" other LLMs according to new benchmark suite</a>, <a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf">Gemini: A Family of Highly Capable Multimodal Models</a></i></p>
+</p>
 
 **Choose a good prompt:** Iterating on your prompts and prompt parameters can significantly enhance the quality of the teacher model's outputs. Thoughtfully crafted prompts often lead to more accurate and contextually relevant responses, which in turn, provide better training material for the student model. 
 
@@ -223,7 +240,7 @@ A more sophisticated prompt does not always lead to better quality. The `simple_
 
 </details>
 
-### Maximize the quality of your training data.
+### 5. Maximize the quality of your training data.
 
 ***Summary:** If you can continue enhancing the quality of your training data, with or without involvement from teachers, you absolutely should. Consider how you might fundamentally improve the quality of your data with manual curation, rules-based filtering, scoring example quality, or teacher aggregation.*
 
@@ -231,13 +248,13 @@ Most mistakes made by converged student models can be traced back to issues with
 
 Here are some of the most popular techniques.
 
-| Technique                                        | Difficulty | General applicability | Manual labor | Description                                                                                                                                                                                                                                             |
-| ------------------------------------------------ | ---------- | --------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Manually fix or curate your data.                | ★          | ★★★★★                 | ★★★★★        | Manually fix and revise bad outputs. Annotate new data. Simple but labor-intensive, this method ensures high-quality, error-free training material.                                                                                                     |
-| Filter data based on rules.                      | ★★         | ★★★★                  | ★★★          | Employ basic rules (length criteria, regex patterns) to eliminate poor-quality data. While setting up rules is straightforward, identifying the right criteria can be time-consuming.                                                                   |
-| Rank your data with auxiliary systems (or LLMs). | ★★★        | ★★★                   | ★            | Use an auxiliary system, such as another model, to assess and rank data quality. For example, Microsoft's phi-1 model employs GPT-4 to score training examples, using a classifier to prioritize higher-value data, and drop the bottom X% of examples. |
-| Enrich data with explanation traces.             | ★★★        | ★★                    | ★            | Collect reasoning data. If your task requires non-trivial reasoning, you may find similar performance gains from including explanation traces or chain-of-thought (CoT) outputs from the teacher.                                                       |
-| Aggregate your teachers.                         | ★★★★       | ★                     | ★            | For recursively-definable tasks such as summarization, use chaining. For tasks with exact answers, take a majority vote. By consolidating multiple teachers, you enable your student model to leapfrog any single teacher.                              |
+| Technique                                        | Difficulty | General applicability | Manual labor | Description                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------ | ---------- | --------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Manually fix or curate your data.                | ★          | ★★★★★                 | ★★★★★        | Manually fix and revise bad outputs. Annotate new data. Simple but labor-intensive, this method ensures high-quality, error-free training material.                                                                                                                                                                             |
+| Filter data based on rules.                      | ★★         | ★★★★                  | ★★★          | Employ basic rules (length criteria, regex patterns) to eliminate poor-quality data. While setting up rules is straightforward, identifying the right criteria can be time-consuming.                                                                                                                                           |
+| Rank your data with auxiliary systems (or LLMs). | ★★★        | ★★★                   | ★            | Use an auxiliary system, such as another model, to assess and rank data quality. For example, Microsoft's phi-1 model employs GPT-4 to score training examples, using a classifier to prioritize higher-value data, and drop the bottom X% of examples. Also see section 2.1 of [this paper](https://arxiv.org/abs/2107.04512). |
+| Enrich data with explanation traces.             | ★★★        | ★★                    | ★            | Collect reasoning data. If your task requires non-trivial reasoning, you may find similar performance gains from including explanation traces or chain-of-thought (CoT) outputs from the teacher.                                                                                                                               |
+| Aggregate your teachers.                         | ★★★★       | ★                     | ★            | For recursively-definable tasks such as summarization, use [chaining](https://blog.langchain.dev/fine-tuning-chatgpt-surpassing-gpt-4-summarization/). For tasks with exact answers, take a majority vote. By consolidating multiple teachers, you enable your student model to leapfrog any single teacher.                    |
 
 <details><summary><em>[Case study: Jigsaw comment toxicity data quality experiments]</em></summary>
 
@@ -257,7 +274,7 @@ Performance improves both when high-quality human-labeled examples are added as 
 
 </details>
 
-### The best datasets are diverse and balanced.
+### 6. The best datasets are diverse and balanced.
 
 ***Summary:** Try to make your dataset diverse, non-repetitive, and balanced. The more scenarios and complexities your dataset covers, the more likely the distilled student will generalize in an unbiased way.*
 
@@ -287,7 +304,7 @@ The higher-level idea is that if you have good test set(s), then when you do mod
 
 </details>
 
-### Start simple and small.
+### 7. Start simple and small.
 
 ***Summary**: Start with smaller, simpler model configurations that are quick to train so that you can debug issues with your setup, iterate quickly, and establish good benchmarks for comparing to more complex model configurations later.*
 
@@ -297,7 +314,7 @@ The higher-level idea is that if you have good test set(s), then when you do mod
 
 **The value of naive baselines.** Always begin with naive, simple baseline models. These serve as a clear benchmark to measure the performance of latent more sophisticated model configurations.
 
-### Assess the marginal utility of having more data.
+### 8. Assess the marginal utility of having more data.
 
 ***Summary:** As a rule of thumb, meaningful fine-tuning results are often achieved with datasets ranging from a few hundred to tens of thousands of examples. To answer the question more concretely, run an ablation of varying dataset size and extrapolate.*
 
@@ -322,7 +339,7 @@ While there's a big jump in performance from 1.1K examples to 5K examples, the j
 
 </details>
 
-### Consider how you want to serve your student.
+### 9. Consider how you want to serve your student.
 
 ***Summary:** While not crucial to decide upfront, have a model serving plan in mind to prioritize experiments with models that can ultimately be served.*
 
@@ -337,7 +354,7 @@ It's important to consider the serving architecture early in the model developme
 
 While full fine-tuning with larger models might yield the highest absolute quality, the trade-off in terms of increased costs or serving latency might not justify the marginal gains in performance.
 
-### Experiment broadly, one parameter at a time.
+### 10. Experiment broadly, one parameter at a time.
 
 ***Summary:** Exploration over exploitation: spend most of your time and energy to gain insight into the problem. Change one variable at a time, and try not to rathole.*
 
@@ -363,7 +380,7 @@ The following suggestions came about as we tried to crystalize our own approach 
 | Training strategy      | Curriculum learning                 | ★★★★              | ★★★             | ★★★★★      | Progressive learning, also known as curriculum learning, is a training strategy where the model is fine-tuned in a series of stages, each with a different kind of training data, typically progressing from more general or noisier data to more specific, high-quality, or in-domain data. Progressive learning mirrors the natural way humans learn: starting from broad concepts and gradually focusing on more specific and complex ideas. Example of progressive learning from [orca-2](https://arxiv.org/abs/2311.11045): ![img](images/curriculum_learning.png) |
 | Training strategy      | RLHF/RLAIF/DPO                      | ★★★★              | ★★★★★           | ★★★★★      | RLHF/RLHAIF/DPO, also called "preference tuning" where the model undergoes reinforcement learning to align better to human preferences. This was originally popularized by OpenAI, however it's extremely costly, and seems like a last mile optimization. We have yet to speak with a company who has a critical need for this level of optimization. High-level diagram of [RLHF vs. RLAIF](https://arxiv.org/abs/2309.00267): ![img](images/rlhf.png)                                                                                                                |
 
-### Look at the model's individual mistakes.
+### 11. Look at the model's individual mistakes.
 
 ***Summary:** While aggregate metrics and advanced automated evaluation methods provide a broad overview of model performance, Manually reviewing examples of your model's outputs brings unparalleled value for a deeper qualitative understanding of model performance.*
 
@@ -377,7 +394,7 @@ Especially in generative contexts where model performance can't be neatly summar
 
 <p align="center" ><i>Loss curves for fine-tuned LLMs will all look like this, yet the qualitative differences between these checkpoints can be substantial.</i></p>
 
-### Monitor your models in production and A/B test them with real users.
+### 12. Monitor your models in production and A/B test them with real users.
 
 ***Summary:** While test sets provide a controlled environment for evaluation, the true test of your model’s effectiveness is how it performs with actual users and real-time inputs. Deploy your model and observe its performance in a real-world setting!*
 
