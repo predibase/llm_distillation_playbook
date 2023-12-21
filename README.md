@@ -26,7 +26,7 @@
     - [9. Consider how you want to serve your student.](#9-consider-how-you-want-to-serve-your-student)
     - [10. Experiment broadly, one parameter at a time.](#10-experiment-broadly-one-parameter-at-a-time)
     - [11. Look at the model's individual mistakes.](#11-look-at-the-models-individual-mistakes)
-    - [12. Monitor your models in production and A/B test them with real users.](#12-monitor-your-models-in-production-and-ab-test-them-with-real-users)
+    - [12. Actually deploy and monitor your models in production.](#12-actually-deploy-and-monitor-your-models-in-production)
       - [Options for model deployment](#options-for-model-deployment)
       - [Infrastructure safeguards](#infrastructure-safeguards)
   - [Contributing](#contributing)
@@ -393,7 +393,7 @@ Especially in generative contexts where model performance can't be neatly summar
 
 <p align="center" ><i>Loss curves for fine-tuned LLMs will all look like this, yet the qualitative differences between these checkpoints can be substantial.</i></p>
 
-### 12. Monitor your models in production and A/B test them with real users.
+### 12. Actually deploy and monitor your models in production.
 
 ***Summary:** While test sets provide a controlled environment for evaluation, the true test of your model’s effectiveness is how it performs with actual users and real-time inputs. Deploy your model and observe its performance in a real-world setting!*
 
