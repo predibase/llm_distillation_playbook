@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/header_image.png">
+  <img src="images/header_image.png" height=250>
 </p>
 
 # LLM Distillation Playbook
