@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/header_image.png" height=150>
+</p>
+
 # LLM Distillation Playbook
 
 **Justin Zhao<sup>&dagger;</sup>, Wael Abid<sup>&dagger;</sup>**
@@ -10,7 +14,7 @@
   - [Table of Contents](#table-of-contents)
   - [Who is this document for?](#who-is-this-document-for)
   - [Why a distillation playbook?](#why-a-distillation-playbook)
-  - [Commmitment to open source](#commmitment-to-open-source)
+  - [Commitment to open source](#commitment-to-open-source)
   - [Key Concepts](#key-concepts)
   - [Best practices](#best-practices)
     - [1. Understand the limitations of smaller models.](#1-understand-the-limitations-of-smaller-models)
@@ -49,7 +53,7 @@ The advice in this document draws from our experience distilling language models
 
 This is a living document. We anticipate making periodic improvements, both small and large. If you’d like to be notified, please watch our repository (see [instructions](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/configuring-notifications#configuring-your-watch-settings-for-an-individual-repository)).
 
-## Commmitment to open source
+## Commitment to open source
 
 At Predibase, we believe that the future is fine-tuned, specialized, and **open source** LLMs. Open source is in the DNA of the company. As a company, we maintain:
 
