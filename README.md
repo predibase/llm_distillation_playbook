@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/header_image.png" height=150>
+</p>
+
 # LLM Distillation Playbook
 
 **Justin Zhao<sup>&dagger;</sup>, Wael Abid<sup>&dagger;</sup>**
