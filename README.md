@@ -8,6 +8,8 @@
 
 &dagger; Predibase, MLX team
 
+[Slides (February 1st, 2024)](https://drive.google.com/file/d/15qrqENfi1TFR-kjK1IU5YnJ9etHaW_Q_/view?usp=drive_link)
+
 ## Table of Contents
 
 - [LLM Distillation Playbook](#llm-distillation-playbook)
@@ -172,7 +174,7 @@ Let's formalize 2 different test sets:
 1. `test-indist`: An in-distribution test set with 90% non-bad examples and 10% toxic examples, drawn from the original test set.
 2. `test-balanced`: An explicitly balanced test set with 50% non-toxic and 50% toxic examples, drawn from the original test set.
 
-By measuring models on both of these test sets simultaneously, we can track how well a candidate model classifies comments overall, as well as how well these classifications would fare in a traffic-realisitic setting.
+By measuring models on both of these test sets simultaneously, we can track how well a candidate model classifies comments overall, as well as how well these classifications would fare in a traffic-realistic setting.
 
 </details>
 
